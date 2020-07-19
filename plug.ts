@@ -106,9 +106,9 @@ export async function prepare(options: Options): Promise<number> {
     : `${url}${(url.endsWith("/") ? "" : "/")}${pref}${options.name}.${ext}`;
 
   const digest = hash(url);
-  const path = join(dir, "plugins", `${name}_${digest}.${ext}`);
+  const path = join(dir, "plug", `${name}_${digest}.${ext}`);
 
-  ensure(dir, "plugins");
+  ensure(dir, "plug");
 
   if (policy === CachePolicy.NONE || !await exists(path)) {
     await fetchFile(url, path);
