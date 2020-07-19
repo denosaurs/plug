@@ -4,8 +4,8 @@ import {
   exists,
   createHash,
   extname,
-  resolve,
   ensureDir,
+  fromFileUrl,
 } from "./deps.ts";
 
 export interface CrossOptions {
@@ -61,9 +61,9 @@ async function fetchFile(url: string, path: string) {
   const protocol = url.split(":")[0];
   switch (protocol) {
     case "file":
-      url = resolve(url.slice(7));
-      if (!exists(url)) {
-        throw new ImportError(`Plugin located at ${url} does not exist.`);
+      url = fromFileUrl(url);
+      if (!await exists(url)) {
+        throw new ImportError(`Plugin located at "${url}" does not exist.`);
       }
       await Deno.copyFile(url, path);
       break;
@@ -72,7 +72,7 @@ async function fetchFile(url: string, path: string) {
       const download = await fetch(url);
 
       if (!download.ok) {
-        throw new ImportError(`Plugin download from ${url} failed.`);
+        throw new ImportError(`Plugin download from "${url}" failed.`);
       }
 
       const source = await download.arrayBuffer();
@@ -110,7 +110,7 @@ export async function prepare(options: Options): Promise<number> {
 
   ensure(dir, "plugins");
 
-  if (policy == CachePolicy.NONE || !await exists(path)) {
+  if (policy === CachePolicy.NONE || !await exists(path)) {
     await fetchFile(url, path);
   }
 
