@@ -110,7 +110,7 @@ export async function prepare(options: Options): Promise<number> {
     url = options.url;
   }
 
-  url = extname(url) !== ""
+  url = Object.values(extensions).includes(extname(url))
     ? url
     : `${url}${(url.endsWith("/") ? "" : "/")}${pref}${options.name}.${ext}`;
 
