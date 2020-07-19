@@ -3,3 +3,6 @@
 
 # test_plugin build
 test_plugin/target
+
+# test cache
+test/cache
