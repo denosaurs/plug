@@ -40,7 +40,16 @@ interface UnstableCore {
   ): Uint8Array | undefined;
 }
 
-export class ImportError extends Error {
+export class PlugError extends Error {
+  constructor(message: string) {
+    super(message);
+
+    this.name = "PlugError";
+    this.stack = undefined;
+  }
+}
+
+export class PlugImportError extends Error {
   constructor(message: string) {
     super(message);
 
@@ -63,7 +72,7 @@ async function fetchFile(url: string, path: string) {
     case "file":
       url = fromFileUrl(url);
       if (!await exists(url)) {
-        throw new ImportError(`Plugin located at "${url}" does not exist.`);
+        throw new PlugImportError(`Plugin located at "${url}" does not exist.`);
       }
       await Deno.copyFile(url, path);
       break;
@@ -72,7 +81,7 @@ async function fetchFile(url: string, path: string) {
       const download = await fetch(url);
 
       if (!download.ok) {
-        throw new ImportError(`Plugin download from "${url}" failed.`);
+        throw new PlugImportError(`Plugin download from "${url}" failed.`);
       }
 
       const source = await download.arrayBuffer();
@@ -80,7 +89,7 @@ async function fetchFile(url: string, path: string) {
       break;
     }
     default:
-      throw new ImportError(`"${protocol}" protocol is not supported.`);
+      throw new PlugImportError(`"${protocol}" protocol is not supported.`);
   }
 }
 
@@ -95,7 +104,7 @@ export async function prepare(options: Options): Promise<number> {
   if ("urls" in options) {
     url = options.urls[os];
     if (!url) {
-      throw new ImportError(`URL for "${os}" platform was not provided.`);
+      throw new PlugImportError(`URL for "${os}" platform was not provided.`);
     }
   } else {
     url = options.url;
@@ -115,6 +124,16 @@ export async function prepare(options: Options): Promise<number> {
   }
 
   return Deno.openPlugin(path);
+}
+
+export function getOpId(op: string): number {
+  const id = core.ops()[op];
+
+  if (!(id > 0)) {
+    throw new PlugError(`Bad op id for "${op}"`);
+  }
+
+  return id;
 }
 
 // deno-lint-ignore ban-ts-comment
