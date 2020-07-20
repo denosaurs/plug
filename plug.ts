@@ -4,8 +4,7 @@ import {
   exists,
   createHash,
   extname,
-  ensureDir,
-  fromFileUrl,
+  ensureDir
 } from "./deps.ts";
 
 export interface CrossOptions {
@@ -66,15 +65,16 @@ async function ensure(...paths: string[]): Promise<void> {
   await ensureDir(join(...paths));
 }
 
-async function fetchFile(url: string, path: string) {
-  const protocol = url.split(":")[0];
+async function fetchFile(url: URL, path: string) {
+  const protocol = url.protocol.slice(0, -1);
   switch (protocol) {
     case "file":
-      url = fromFileUrl(url);
-      if (!await exists(url)) {
-        throw new PlugImportError(`Plugin located at "${url}" does not exist.`);
+      const ospath = join(url.host, url.pathname);
+      console.log(ospath);
+      if (!await exists(ospath)) {
+        throw new PlugImportError(`Plugin located at "${ospath}" does not exist.`);
       }
-      await Deno.copyFile(url, path);
+      await Deno.copyFile(ospath, path);
       break;
     case "http":
     case "https": {
@@ -97,7 +97,6 @@ export async function prepare(options: Options): Promise<number> {
   const name = options.name;
   const policy = options.policy ?? CachePolicy.STORE;
   const dir = options.cache ?? cache();
-  const pref = prefixes[os];
   const ext = extensions[os];
 
   let url;
@@ -110,11 +109,9 @@ export async function prepare(options: Options): Promise<number> {
     url = options.url;
   }
 
-  url = Object.values(extensions).includes(extname(url))
-    ? url
-    : `${url}${(url.endsWith("/") ? "" : "/")}${pref}${options.name}.${ext}`;
+  url = new URL(url);
 
-  const digest = hash(url);
+  const digest = hash(url.href);
   const path = join(dir, "plug", `${name}_${digest}.${ext}`);
 
   ensure(dir, "plug");
@@ -144,9 +141,4 @@ export const extensions: { [os in typeof Deno.build.os]: string } = {
   darwin: "dylib",
   linux: "so",
   windows: "dll",
-};
-export const prefixes: { [os in typeof Deno.build.os]: string } = {
-  darwin: "lib",
-  linux: "lib",
-  windows: "",
 };

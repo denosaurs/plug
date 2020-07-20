@@ -43,6 +43,7 @@ export function server(address: string) {
 
   (async () => {
     for await (const request of server) {
+      console.log(request.url);
       const response = await serveFile(
         request,
         resolve(`.${request.url}`),
