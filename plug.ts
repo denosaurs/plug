@@ -1,9 +1,6 @@
 import {
   Cache,
-  join,
-  exists,
-  createHash,
-  ensureDir,
+  extname
 } from "./deps.ts";
 
 export interface CrossOptions {
@@ -60,8 +57,6 @@ export async function prepare(options: Options): Promise<number> {
   const directory = options.cache ?? Cache.options.directory;
   Cache.configure({ directory });
 
-  console.log(directory);
-
   let url;
   if ("urls" in options) {
     url = options.urls[os];
@@ -72,7 +67,15 @@ export async function prepare(options: Options): Promise<number> {
     url = options.url;
   }
 
-  url = new URL(url);
+  const pref = prefixes[os];
+  const ext = extensions[os];
+
+  url = Object.values(extensions).includes(extname(url))
+    ? url
+    : `${url}${(url.endsWith("/") ? "" : "/")}${pref}${options.name}${ext}`;
+
+    console.log(url);
+    
 
   const plug = Cache.namespace("plug");
   const file = await plug.fetch(url);
@@ -95,7 +98,12 @@ export function getOpId(op: string): number {
 export const core = Deno.core as UnstableCore;
 export const os = Deno.build.os;
 export const extensions: { [os in typeof Deno.build.os]: string } = {
-  darwin: "dylib",
-  linux: "so",
-  windows: "dll",
+  darwin: ".dylib",
+  linux: ".so",
+  windows: ".dll",
+};
+export const prefixes: { [os in typeof Deno.build.os]: string } = {
+  darwin: "lib",
+  linux: "lib",
+  windows: "",
 };
