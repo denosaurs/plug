@@ -1,7 +1,7 @@
 export {
   resolve,
   join,
-  extname
+  extname,
 } from "https://deno.land/std@0.61.0/path/mod.ts";
 
 export {
@@ -10,3 +10,5 @@ export {
 } from "https://deno.land/std@0.61.0/fs/mod.ts";
 
 export { createHash } from "https://deno.land/std@0.61.0/hash/mod.ts";
+
+export { Cache } from "https://x.nest.land/cache@0.0.2/mod.ts";

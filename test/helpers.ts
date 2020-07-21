@@ -1,5 +1,6 @@
 import { Plug } from "../mod.ts";
 import {
+  Cache,
   assertEquals,
   serve,
   serveFile,
@@ -77,6 +78,8 @@ export async function assertScript(
       script,
       ...args,
     ],
+    stderr: "inherit",
+    stdout: "inherit",
   });
   const status = await process.status();
   process.close();
@@ -96,5 +99,5 @@ export async function assertCache(): Promise<void> {
 }
 
 export async function cleanCache() {
-  await Deno.remove(resolveTest("cache"), { recursive: true });
+  await Cache.purge("plug");
 }

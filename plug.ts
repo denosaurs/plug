@@ -1,10 +1,9 @@
-import { cache } from "./cache.ts";
 import {
+  Cache,
   join,
   exists,
   createHash,
-  extname,
-  ensureDir
+  ensureDir,
 } from "./deps.ts";
 
 export interface CrossOptions {
@@ -57,47 +56,11 @@ export class PlugImportError extends Error {
   }
 }
 
-function hash(value: string) {
-  return createHash("sha256").update(value).toString();
-}
-
-async function ensure(...paths: string[]): Promise<void> {
-  await ensureDir(join(...paths));
-}
-
-async function fetchFile(url: URL, path: string) {
-  const protocol = url.protocol.slice(0, -1);
-  switch (protocol) {
-    case "file":
-      const ospath = join(url.host, url.pathname);
-      console.log(ospath);
-      if (!await exists(ospath)) {
-        throw new PlugImportError(`Plugin located at "${ospath}" does not exist.`);
-      }
-      await Deno.copyFile(ospath, path);
-      break;
-    case "http":
-    case "https": {
-      const download = await fetch(url);
-
-      if (!download.ok) {
-        throw new PlugImportError(`Plugin download from "${url}" failed.`);
-      }
-
-      const source = await download.arrayBuffer();
-      await Deno.writeFile(path, new Uint8Array(source));
-      break;
-    }
-    default:
-      throw new PlugImportError(`"${protocol}" protocol is not supported.`);
-  }
-}
-
 export async function prepare(options: Options): Promise<number> {
-  const name = options.name;
-  const policy = options.policy ?? CachePolicy.STORE;
-  const dir = options.cache ?? cache();
-  const ext = extensions[os];
+  const directory = options.cache ?? Cache.options.directory;
+  Cache.configure({ directory });
+
+  console.log(directory);
 
   let url;
   if ("urls" in options) {
@@ -111,16 +74,10 @@ export async function prepare(options: Options): Promise<number> {
 
   url = new URL(url);
 
-  const digest = hash(url.href);
-  const path = join(dir, "plug", `${name}_${digest}.${ext}`);
+  const plug = Cache.namespace("plug");
+  const file = await plug.fetch(url);
 
-  ensure(dir, "plug");
-
-  if (policy === CachePolicy.NONE || !await exists(path)) {
-    await fetchFile(url, path);
-  }
-
-  return Deno.openPlugin(path);
+  return Deno.openPlugin(file.path);
 }
 
 export function getOpId(op: string): number {
