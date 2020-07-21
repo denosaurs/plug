@@ -11,6 +11,7 @@ Plugin management library.
 ```typescript
 import { Plug } from "https://deno.land/x/plug/mod.ts";
 
+// Backwards compatibility with deno-plugin-prepare
 const options: Plug.Options = {
   name: "test_plugin",
   urls: {
@@ -18,6 +19,16 @@ const options: Plug.Options = {
     windows: `${path}/test_plugin.dll`,
     linux: `${path}/libtest_plugin.so`,
   }
+};
+
+// Or if you want plug to guess your binary names
+const options: Plug.Options = {
+  name: "test_plugin",
+  url: "https://example.com/some/path/"
+  // Becomes:
+  // darwin: "https://example.com/some/path/libtest_plugin.dylib"
+  // windows: "https://example.com/some/path/test_plugin.dll"
+  // linux: "https://example.com/some/path/libtest_plugin.so"
 };
 
 const rid = await Plug.prepare(options);
