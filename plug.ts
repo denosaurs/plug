@@ -74,8 +74,6 @@ export async function prepare(options: Options): Promise<number> {
     ? url
     : `${url}${(url.endsWith("/") ? "" : "/")}${pref}${options.name}${ext}`;
 
-  console.log(url);
-
   const plug = Cache.namespace("plug");
   const file = await plug.fetch(url);
 
