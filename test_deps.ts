@@ -15,4 +15,4 @@ export {
 
 export { exists } from "https://deno.land/std@0.61.0/fs/mod.ts";
 
-export { Cache } from "https://x.nest.land/cache@0.0.2/mod.ts";
+export { Cache } from "https://x.nest.land/cache@0.0.3/mod.ts";
