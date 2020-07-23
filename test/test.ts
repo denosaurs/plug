@@ -17,7 +17,18 @@ Deno.test({
 });
 
 Deno.test({
-  name: "local | prepare",
+  name: "local | prepare | relative",
+  async fn(): Promise<void> {
+    await cleanCache();
+    await assertScript("local.ts");
+    await assertCache();
+    await assertScript("local.ts");
+    await assertCache();
+  },
+});
+
+Deno.test({
+  name: "local | prepare | absolute",
   async fn(): Promise<void> {
     await cleanCache();
     await assertScript("local.ts");
