@@ -31,9 +31,9 @@ Deno.test({
   name: "local | prepare | absolute",
   async fn(): Promise<void> {
     await cleanCache();
-    await assertScript("local.ts");
+    await assertScript("abs.ts");
     await assertCache();
-    await assertScript("local.ts");
+    await assertScript("abs.ts");
     await assertCache();
   },
 });

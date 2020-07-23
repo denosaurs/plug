@@ -25,7 +25,12 @@ jobs:
       run: deno lint --unstable
       
   test:
-    runs-on: ubuntu-latest
+    name: ${{ matrix.kind }} ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        os: [macOS-latest, windows-latest, ubuntu-latest]
     steps:
     - name: Checkout sources
       uses: actions/checkout@v2
@@ -49,4 +54,4 @@ jobs:
         args: --manifest-path=test_plugin/Cargo.toml
 
     - name: Run deno test
-      run: deno test -A --unstable
+      run: deno test --allow-read --allow-write --allow-net --allow-run --unstable

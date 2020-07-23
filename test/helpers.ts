@@ -99,5 +99,8 @@ export async function assertCache(): Promise<void> {
 }
 
 export async function cleanCache() {
+  Cache.configure({
+    directory: resolveTest("cache"),
+  });
   await Cache.purge("plug");
 }

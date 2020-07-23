@@ -77,10 +77,6 @@ export async function prepare(options: Options): Promise<number> {
     ? url
     : `${url}${(url.endsWith("/") ? "" : "/")}${pref}${options.name}${ext}`;
 
-  if (!/^https?:\/\//.test(url) && !/^file:\/\//.test(url)) url = "file://" + url;
-
-  console.log(url);
-
   const plug = Cache.namespace("plug");
   const file = await plug.fetch(url, policy);
 
