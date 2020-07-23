@@ -55,6 +55,9 @@ export class PlugImportError extends Error {
 
 export async function prepare(options: Options): Promise<number> {
   const directory = options.cache ?? Cache.options.directory;
+  const policy = options.policy === CachePolicy.NONE
+    ? Cache.RELOAD_POLICY
+    : undefined;
   Cache.configure({ directory });
 
   let url;
@@ -75,7 +78,7 @@ export async function prepare(options: Options): Promise<number> {
     : `${url}${(url.endsWith("/") ? "" : "/")}${pref}${options.name}${ext}`;
 
   const plug = Cache.namespace("plug");
-  const file = await plug.fetch(url);
+  const file = await plug.fetch(url, policy);
 
   return Deno.openPlugin(file.path);
 }
