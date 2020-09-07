@@ -80,6 +80,7 @@ export async function prepare(options: Options): Promise<number> {
   const plug = Cache.namespace("plug");
   const file = await plug.fetch(url, policy);
 
+  // @ts-ignore
   return Deno.openPlugin(file.path);
 }
 

@@ -1,11 +1,16 @@
 # plug 
 
+[![Tags](https://img.shields.io/github/release/denosaurs/plug)](https://github.com/denosaurs/plug/releases)
+[![CI Status](https://img.shields.io/github/workflow/status/denosaurs/plug/check)](https://github.com/denosaurs/plug/actions)
+[![Dependencies](https://img.shields.io/github/workflow/status/denosaurs/plug/depsbot?label=dependencies)](https://github.com/denosaurs/depsbot)
+[![License](https://img.shields.io/github/license/denosaurs/plug)](https://github.com/denosaurs/plug/blob/master/LICENSE)
+
 Plugin management library.
 
 ---
 > ⚠️ Plugins in deno are unstable and undergoing BREAKING CHANGES.
-> this library aims to follow changes to the stdlib as closly as
-> possible.
+This library aims to follow changes to the stdlib as closly as
+possible.
 ---
 
 ```typescript
@@ -42,12 +47,17 @@ const response = Plug.core.dispatch(
 Deno.close(rid);
 ```
 
-## other
+## Other
 
-### contribution
+### Related
 
-Pull request, issues and feedback are very welcome. Code style is formatted with `deno fmt` and commit messages are done following [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) spec.
+- [deno_plugin_prepare](https://github.com/manyuanrong/deno-plugin-prepare) - A library for managing deno native plugin dependencies
+- [cache](https://github.com/denosaurs/cache) - Deno cache library
 
-### licence
+### Contribution
+
+Pull request, issues and feedback are very welcome. Code style is formatted with `deno fmt` and commit messages are done following Conventional Commits spec.
+
+### Licence
 
 Copyright 2020-present, the denosaurs team. All rights reserved. MIT license.

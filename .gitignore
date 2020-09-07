@@ -6,3 +6,6 @@ test_plugin/target
 
 # test cache
 test/cache
+
+# vscode
+.vscode
