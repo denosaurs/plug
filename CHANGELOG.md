@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog],
 and this project adheres to [Semantic Versioning].
 
+## [0.2.1] - 2020-09-13
+
+### Bug Fixes
+
+- windows compatibility issue ([`dcd2f6d`])
+
+## [0.2.0] - 2020-09-13
+
 ## [0.1.1] - 2020-09-07
 
 ## [0.1.0] - 2020-09-07
@@ -50,6 +58,9 @@ and this project adheres to [Semantic Versioning].
 
 [keep a changelog]: https://keepachangelog.com/en/1.0.0/
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
+[0.2.1]: https://github.com/denosaurs/plug/compare/0.2.0...0.2.1
+[`dcd2f6d`]: https://github.com/denosaurs/plug/commit/dcd2f6d5753f227e5adabe1fa30fb6e98409a9e7
+[0.2.0]: https://github.com/denosaurs/plug/compare/0.1.1...0.2.0
 [0.1.1]: https://github.com/denosaurs/plug/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/denosaurs/plug/compare/0.0.5...0.1.0
 [`dcd2f6d`]: https://github.com/denosaurs/plug/commit/dcd2f6d5753f227e5adabe1fa30fb6e98409a9e7
