@@ -1,15 +1,15 @@
 import { Plug } from "../mod.ts";
 import {
-  Cache,
+  assert,
   assertEquals,
-  serve,
-  serveFile,
-  resolve,
+  Cache,
   dirname,
+  exists,
   fromFileUrl,
   join,
-  assert,
-  exists,
+  resolve,
+  serve,
+  serveFile,
 } from "../test_deps.ts";
 
 const decoder = new TextDecoder();

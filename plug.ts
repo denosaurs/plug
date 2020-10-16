@@ -1,7 +1,4 @@
-import {
-  Cache,
-  extname,
-} from "./deps.ts";
+import { Cache, extname } from "./deps.ts";
 
 export interface CrossOptions {
   name: string;

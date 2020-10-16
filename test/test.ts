@@ -1,4 +1,4 @@
-import { server, cleanCache, assertScript, assertCache } from "./helpers.ts";
+import { assertCache, assertScript, cleanCache, server } from "./helpers.ts";
 
 Deno.test({
   name: "remote | prepare",
