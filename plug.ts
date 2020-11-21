@@ -75,7 +75,7 @@ export async function prepare(options: Options): Promise<number> {
     : `${url}${(url.endsWith("/") ? "" : "/")}${pref}${options.name}${ext}`;
 
   const plug = Cache.namespace("plug");
-  const file = await plug.fetch(url, policy);
+  const file = await plug.cache(url, policy);
 
   // deno-lint-ignore ban-ts-comment
   // @ts-ignore

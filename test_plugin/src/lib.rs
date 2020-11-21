@@ -1,6 +1,8 @@
 use deno_core::plugin_api::Interface;
 use deno_core::plugin_api::Op;
 use deno_core::plugin_api::ZeroCopyBuf;
+
+use deno_core::futures;
 use futures::future::FutureExt;
 
 #[no_mangle]

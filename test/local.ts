@@ -1,3 +1,3 @@
 import { run } from "./helpers.ts";
 
-await run("file://./test_plugin/target/debug");
+await run("./test_plugin/target/debug");
