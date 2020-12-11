@@ -9,4 +9,4 @@ publish = false
 crate-type = ["cdylib"]
 
 [dependencies]
-deno_core = "0.69.0"
+deno_core = "0.70.0"
