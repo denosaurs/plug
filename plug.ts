@@ -1,10 +1,11 @@
-import { Cache, extname } from "./deps.ts";
+import { Cache, extname, green } from "./deps.ts";
 
 export interface CrossOptions {
   name: string;
   urls: { [os in typeof Deno.build.os]?: string };
   policy?: CachePolicy;
   cache?: string;
+  log?: boolean;
 }
 
 export interface SingleOptions {
@@ -12,6 +13,7 @@ export interface SingleOptions {
   url: string;
   policy?: CachePolicy;
   cache?: string;
+  log?: boolean;
 }
 
 export type Options = CrossOptions | SingleOptions;
@@ -75,6 +77,9 @@ export async function prepare(options: Options): Promise<number> {
     : `${url}${(url.endsWith("/") ? "" : "/")}${pref}${options.name}${ext}`;
 
   const plug = Cache.namespace("plug");
+  if (options.log ?? true) {
+    console.log(`${green("Download")} ${url}`);
+  }
   const file = await plug.cache(url, policy);
 
   // deno-lint-ignore ban-ts-comment
