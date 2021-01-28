@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog],
 and this project adheres to [Semantic Versioning].
 
+## [0.2.9] - 2021-01-28
+
+### Features
+
+- log when downloading plugin ([`f065135`])
+
 ## [0.2.8] - 2021-01-27
 
 ## [0.2.7] - 2020-12-11
@@ -72,6 +78,8 @@ and this project adheres to [Semantic Versioning].
 
 [keep a changelog]: https://keepachangelog.com/en/1.0.0/
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
+[0.2.9]: https://github.com/denosaurs/plug/compare/0.2.8...0.2.9
+[`f065135`]: https://github.com/denosaurs/plug/commit/f0651353cce36479deae0d2f41408e31ab00cbbf
 [0.2.8]: https://github.com/denosaurs/plug/compare/0.2.7...0.2.8
 [0.2.7]: https://github.com/denosaurs/plug/compare/0.2.6...0.2.7
 [0.2.6]: https://github.com/denosaurs/plug/compare/0.2.5...0.2.6
