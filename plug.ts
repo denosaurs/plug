@@ -77,7 +77,7 @@ export async function prepare(options: Options): Promise<number> {
     : `${url}${(url.endsWith("/") ? "" : "/")}${pref}${options.name}${ext}`;
 
   const plug = Cache.namespace("plug");
-  if (options.log ?? true) {
+  if ((options.log ?? true) && !(await plug.exists(url))) {
     console.log(`${green("Download")} ${url}`);
   }
   const file = await plug.cache(url, policy);

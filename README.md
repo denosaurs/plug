@@ -1,4 +1,4 @@
-# plug 
+# plug
 
 [![Tags](https://img.shields.io/github/release/denosaurs/plug)](https://github.com/denosaurs/plug/releases)
 [![CI Status](https://img.shields.io/github/workflow/status/denosaurs/plug/check)](https://github.com/denosaurs/plug/actions)
@@ -8,9 +8,10 @@
 Plugin management library.
 
 ---
-> ⚠️ Plugins in deno are unstable and undergoing BREAKING CHANGES.
-This library aims to follow changes to the stdlib as closly as
-possible.
+
+> ⚠️ Plugins in deno are unstable and undergoing BREAKING CHANGES. This library
+> aims to follow changes to the stdlib as closly as possible.
+
 ---
 
 ```typescript
@@ -51,12 +52,14 @@ Deno.close(rid);
 
 ### Related
 
-- [deno_plugin_prepare](https://github.com/manyuanrong/deno-plugin-prepare) - A library for managing deno native plugin dependencies
+- [deno_plugin_prepare](https://github.com/manyuanrong/deno-plugin-prepare) - A
+  library for managing deno native plugin dependencies
 - [cache](https://github.com/denosaurs/cache) - Deno cache library
 
 ### Contribution
 
-Pull request, issues and feedback are very welcome. Code style is formatted with `deno fmt` and commit messages are done following Conventional Commits spec.
+Pull request, issues and feedback are very welcome. Code style is formatted with
+`deno fmt` and commit messages are done following Conventional Commits spec.
 
 ### Licence
 
