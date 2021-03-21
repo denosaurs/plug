@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog], and this project adheres to
 [Semantic Versioning].
 
+## [0.2.10] - 2021-03-21
+
 ## [0.2.9] - 2021-01-28
 
 ### Features
@@ -73,12 +75,12 @@ The format is based on [Keep a Changelog], and this project adheres to
 ### Bug Fixes
 
 - add cache support ([`4e9d477`])
-- :globe: Make sure to guess the url only when the extension is relevant
-  ([`5c559ae`])
+- :globe: Make sure to guess the url only when the extension is relevant ([`5c559ae`])
 - :wrench: Minor tweak to fix file protocol urls ([`06ee6fb`])
 
 [keep a changelog]: https://keepachangelog.com/en/1.0.0/
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
+[0.2.10]: https://github.com/denosaurs/plug/compare/0.2.9...0.2.10
 [0.2.9]: https://github.com/denosaurs/plug/compare/0.2.8...0.2.9
 [`f065135`]: https://github.com/denosaurs/plug/commit/f0651353cce36479deae0d2f41408e31ab00cbbf
 [0.2.8]: https://github.com/denosaurs/plug/compare/0.2.7...0.2.8
