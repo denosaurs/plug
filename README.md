@@ -5,12 +5,16 @@
 [![Dependencies](https://img.shields.io/github/workflow/status/denosaurs/plug/depsbot?label=dependencies)](https://github.com/denosaurs/depsbot)
 [![License](https://img.shields.io/github/license/denosaurs/plug)](https://github.com/denosaurs/plug/blob/master/LICENSE)
 
-Plugin management library.
+Plugin management library featuring automatic caching of local and remote
+binaries, cross-platform automatic url guessing,
+[deno_plugin_prepare](https://github.com/manyuanrong/deno-plugin-prepare)
+backwards compatibility and pretty deno-like logging when caching and
+downloading binaries.
 
 ---
 
 > ⚠️ Plugins in deno are unstable and undergoing BREAKING CHANGES. This library
-> aims to follow changes to the stdlib as closly as possible.
+> aims to follow changes to deno as closly as possible.
 
 ---
 
@@ -21,16 +25,16 @@ import { Plug } from "https://deno.land/x/plug/mod.ts";
 const options: Plug.Options = {
   name: "test_plugin",
   urls: {
-    darwin: `${path}/libtest_plugin.dylib`,
-    windows: `${path}/test_plugin.dll`,
-    linux: `${path}/libtest_plugin.so`,
-  }
+    darwin: `https://example.com/some/path/libtest_plugin.dylib`,
+    windows: `https://example.com/some/path/test_plugin.dll`,
+    linux: `https://example.com/some/path/libtest_plugin.so`,
+  },
 };
 
 // Or if you want plug to guess your binary names
 const options: Plug.Options = {
   name: "test_plugin",
-  url: "https://example.com/some/path/"
+  url: "https://example.com/some/path/",
   // Becomes:
   // darwin: "https://example.com/some/path/libtest_plugin.dylib"
   // windows: "https://example.com/some/path/test_plugin.dll"
@@ -39,13 +43,11 @@ const options: Plug.Options = {
 
 const rid = await Plug.prepare(options);
 
-const { testSync } = Plug.core.ops();
-const response = Plug.core.dispatch(
-  testSync,
-  ...
+const response = Plug.core.opSync<string>(
+  "op_test_sync",
+  { val: "1" },
+  new Uint8Array([116, 101, 115, 116]),
 );
-
-Deno.close(rid);
 ```
 
 ## Other
@@ -63,4 +65,4 @@ Pull request, issues and feedback are very welcome. Code style is formatted with
 
 ### Licence
 
-Copyright 2020-present, the denosaurs team. All rights reserved. MIT license.
+Copyright 2020-2021, the denosaurs team. All rights reserved. MIT license.

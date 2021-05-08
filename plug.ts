@@ -24,14 +24,12 @@ export enum CachePolicy {
 }
 
 interface UnstableCore {
-  ops: () => { [key: string]: number };
-  setAsyncHandler(rid: number, handler: (response: Uint8Array) => void): void;
-  dispatch(
-    rid: number,
-    // deno-lint-ignore no-explicit-any
-    msg: any,
-    buf?: ArrayBufferView,
-  ): Uint8Array | undefined;
+  opSync: <T>(opName: string, args?: unknown, zeroCopy?: Uint8Array) => T;
+  opAsync: <T>(
+    opName: string,
+    args?: unknown,
+    zeroCopy?: Uint8Array,
+  ) => Promise<T>;
 }
 
 export class PlugError extends Error {
@@ -85,16 +83,6 @@ export async function prepare(options: Options): Promise<number> {
   // deno-lint-ignore ban-ts-comment
   // @ts-ignore
   return Deno.openPlugin(file.path);
-}
-
-export function getOpId(op: string): number {
-  const id = core.ops()[op];
-
-  if (!(id > 0)) {
-    throw new PlugError(`Bad op id for "${op}"`);
-  }
-
-  return id;
 }
 
 // deno-lint-ignore ban-ts-comment

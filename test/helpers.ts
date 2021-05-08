@@ -12,8 +12,6 @@ import {
   serveFile,
 } from "../test_deps.ts";
 
-const decoder = new TextDecoder();
-
 export async function run(path: string) {
   const options: Plug.Options = {
     name: "test_plugin",
@@ -25,18 +23,15 @@ export async function run(path: string) {
     cache: resolveTest("cache"),
   };
 
-  const rid = await Plug.prepare(options);
+  await Plug.prepare(options);
 
-  const { testSync } = Plug.core.ops();
-  const response = Plug.core.dispatch(
-    testSync,
+  const response = Plug.core.opSync<string>(
+    "op_test_sync",
+    { val: "1" },
     new Uint8Array([116, 101, 115, 116]),
-    new Uint8Array([116, 101, 115, 116]),
-  )!;
+  );
 
-  assertEquals(decoder.decode(response), "test");
-
-  Deno.close(rid);
+  assertEquals(response, "test");
 }
 
 export function server(address: string) {
