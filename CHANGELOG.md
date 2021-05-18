@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog], and this project adheres to
 [Semantic Versioning].
 
+## [0.3.1] - 2021-05-18
+
+### Features
+
+- bump deps, update tests ([`00ac928`])
+
+### Bug Fixes
+
+- don't type the second op arg as `Uint8Array` (#6) ([`9666498`])
+- ci using deno canary ([`8a0fe36`])
+
 ## [0.3.0] - 2021-05-08
 
 ### Features
@@ -81,12 +92,15 @@ The format is based on [Keep a Changelog], and this project adheres to
 ### Bug Fixes
 
 - add cache support ([`4e9d477`])
-- :globe: Make sure to guess the url only when the extension is relevant
-  ([`5c559ae`])
+- :globe: Make sure to guess the url only when the extension is relevant ([`5c559ae`])
 - :wrench: Minor tweak to fix file protocol urls ([`06ee6fb`])
 
 [keep a changelog]: https://keepachangelog.com/en/1.0.0/
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
+[0.3.1]: https://github.com/denosaurs/plug/compare/0.3.0...0.3.1
+[`00ac928`]: https://github.com/denosaurs/plug/commit/00ac928462d4657e361fd1cd269f1a69c8f0d374
+[`9666498`]: https://github.com/denosaurs/plug/commit/96664982072cfe3f4895948a8b38528b32368897
+[`8a0fe36`]: https://github.com/denosaurs/plug/commit/8a0fe3661b4582b7991cd16a57419c36a492672a
 [0.3.0]: https://github.com/denosaurs/plug/compare/0.2.10...0.3.0
 [`2374cbc`]: https://github.com/denosaurs/plug/commit/2374cbc80e37604a243839887013bc60374ce490
 [0.2.10]: https://github.com/denosaurs/plug/compare/0.2.9...0.2.10
