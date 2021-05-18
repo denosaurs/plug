@@ -1,8 +1,8 @@
 # plug
 
 [![Tags](https://img.shields.io/github/release/denosaurs/plug)](https://github.com/denosaurs/plug/releases)
-[![CI Status](https://img.shields.io/github/workflow/status/denosaurs/plug/check)](https://github.com/denosaurs/plug/actions)
-[![Dependencies](https://img.shields.io/github/workflow/status/denosaurs/plug/depsbot?label=dependencies)](https://github.com/denosaurs/depsbot)
+[![Checks](https://github.com/denosaurs/plug/actions/workflows/deno.yml/badge.svg)](https://github.com/denosaurs/plug/actions/workflows/deno.yml)
+[![Dependencies](https://github.com/denosaurs/plug/actions/workflows/depsbot.yml/badge.svg)](https://github.com/denosaurs/plug/actions/workflows/depsbot.yml)
 [![License](https://img.shields.io/github/license/denosaurs/plug)](https://github.com/denosaurs/plug/blob/master/LICENSE)
 
 Plugin management library featuring automatic caching of local and remote

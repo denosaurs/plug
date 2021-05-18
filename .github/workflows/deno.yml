@@ -1,30 +1,26 @@
-name: check
+name: deno
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+on: [push, pull_request]
 
 jobs:
-  lint:
+  style:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout sources
-      uses: actions/checkout@v2
-      
-    - name: Setup latest deno version
-      uses: denoland/setup-deno@main
-      with:
-        deno-version: canary
+      - name: checkout repo
+        uses: actions/checkout@v2
 
-    - name: Check deno fmt
-      run: deno fmt --check
-    
-    - name: Check deno lint
-      run: deno lint --unstable
+      - name: setup latest deno version
+        uses: denoland/setup-deno@main
+        with:
+          deno-version: v1.x
+
+      - name: run deno fmt
+        run: deno fmt --check
+
+      - name: run deno lint
+        run: deno lint --unstable
       
-  test:
+  tests:
     name: ${{ matrix.kind }} ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
@@ -37,8 +33,8 @@ jobs:
       
     - name: Setup latest deno version
       uses: denoland/setup-deno@main
-      with:
-        deno-version: canary
+        with:
+          deno-version: v1.x
 
     - name: Install stable rust toolchain
       uses: actions-rs/toolchain@v1
@@ -53,5 +49,5 @@ jobs:
         command: build
         args: --manifest-path=test_plugin/Cargo.toml
 
-    - name: Run deno test
-      run: deno test --allow-read --allow-write --allow-net --allow-run --unstable
+    - name: run deno test
+      run: deno test -A --unstable
