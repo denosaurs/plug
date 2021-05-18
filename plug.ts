@@ -24,12 +24,8 @@ export enum CachePolicy {
 }
 
 interface UnstableCore {
-  opSync: <T>(opName: string, args?: unknown, zeroCopy?: Uint8Array) => T;
-  opAsync: <T>(
-    opName: string,
-    args?: unknown,
-    zeroCopy?: Uint8Array,
-  ) => Promise<T>;
+  opSync: <T>(opName: string, arg1?: unknown, arg2?: unknown) => T;
+  opAsync: <T>(opName: string, arg1?: unknown, arg2?: unknown) => Promise<T>;
 }
 
 export class PlugError extends Error {
