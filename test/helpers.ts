@@ -23,15 +23,13 @@ export async function run(path: string) {
     cache: resolveTest("cache"),
   };
 
-  await Plug.prepare(options);
+  const lib = await Plug.prepare(options, {
+    test_sync: { parameters: [], result: "i8" },
+  });
 
-  const response = Plug.core.opSync<string>(
-    "op_test_sync",
-    { val: "1" },
-    new Uint8Array([116, 101, 115, 116]),
-  );
+  const response = lib.symbols.test_sync();
 
-  assertEquals(response, "test");
+  assertEquals(response, 1);
 }
 
 export function server(address: string) {
@@ -67,7 +65,7 @@ export async function assertScript(
       "run",
       "--allow-read",
       "--allow-write",
-      "--allow-plugin",
+      "--allow-ffi",
       "--allow-net",
       "--unstable",
       script,
