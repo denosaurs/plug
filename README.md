@@ -5,7 +5,7 @@
 [![Dependencies](https://github.com/denosaurs/plug/actions/workflows/depsbot.yml/badge.svg)](https://github.com/denosaurs/plug/actions/workflows/depsbot.yml)
 [![License](https://img.shields.io/github/license/denosaurs/plug)](https://github.com/denosaurs/plug/blob/master/LICENSE)
 
-Plugin management library featuring automatic caching of local and remote
+FFI Plugin management library featuring automatic caching of local and remote
 binaries, cross-platform automatic url guessing,
 [deno_plugin_prepare](https://github.com/manyuanrong/deno-plugin-prepare)
 backwards compatibility and pretty deno-like logging when caching and
@@ -13,8 +13,8 @@ downloading binaries.
 
 ---
 
-> ⚠️ Plugins in deno are unstable and undergoing BREAKING CHANGES. This library
-> aims to follow changes to deno as closly as possible.
+> ⚠️ FFI in deno is unstable and undergoing BREAKING CHANGES. This library aims
+> to follow changes to deno as closly as possible.
 
 ---
 
@@ -23,31 +23,30 @@ import { Plug } from "https://deno.land/x/plug/mod.ts";
 
 // Backwards compatibility with deno-plugin-prepare
 const options: Plug.Options = {
-  name: "test_plugin",
+  name: "test_lib",
   urls: {
-    darwin: `https://example.com/some/path/libtest_plugin.dylib`,
-    windows: `https://example.com/some/path/test_plugin.dll`,
-    linux: `https://example.com/some/path/libtest_plugin.so`,
+    darwin: `https://example.com/some/path/libtest_lib.dylib`,
+    windows: `https://example.com/some/path/test_lib.dll`,
+    linux: `https://example.com/some/path/libtest_lib.so`,
   },
 };
 
 // Or if you want plug to guess your binary names
 const options: Plug.Options = {
-  name: "test_plugin",
+  name: "test_lib",
   url: "https://example.com/some/path/",
   // Becomes:
-  // darwin: "https://example.com/some/path/libtest_plugin.dylib"
-  // windows: "https://example.com/some/path/test_plugin.dll"
-  // linux: "https://example.com/some/path/libtest_plugin.so"
+  // darwin: "https://example.com/some/path/libtest_lib.dylib"
+  // windows: "https://example.com/some/path/test_lib.dll"
+  // linux: "https://example.com/some/path/libtest_lib.so"
 };
 
-const rid = await Plug.prepare(options);
+// Drop-in replacement for `Deno.dlopen`
+const library = await Plug.prepare(options, {
+  noop: { parameters: [], result: "void" },
+});
 
-const response = Plug.core.opSync<string>(
-  "op_test_sync",
-  { val: "1" },
-  new Uint8Array([116, 101, 115, 116]),
-);
+library.symbols.noop();
 ```
 
 ## Other
