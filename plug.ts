@@ -23,11 +23,6 @@ export enum CachePolicy {
   STORE,
 }
 
-interface UnstableCore {
-  opSync: <T>(opName: string, arg1?: unknown, arg2?: unknown) => T;
-  opAsync: <T>(opName: string, arg1?: unknown, arg2?: unknown) => Promise<T>;
-}
-
 export class PlugError extends Error {
   constructor(message: string) {
     super(message);
@@ -46,7 +41,10 @@ export class PlugImportError extends Error {
   }
 }
 
-export async function prepare(options: Options): Promise<number> {
+export async function prepare<S extends Record<string, Deno.ForeignFunction>>(
+  options: Options,
+  symbols: S,
+): Promise<Deno.DynamicLibrary<S>> {
   const directory = options.cache ?? Cache.options.directory;
   const policy = options.policy === CachePolicy.NONE
     ? Cache.RELOAD_POLICY
@@ -76,14 +74,9 @@ export async function prepare(options: Options): Promise<number> {
   }
   const file = await plug.cache(url, policy);
 
-  // deno-lint-ignore ban-ts-comment
-  // @ts-ignore
-  return Deno.openPlugin(file.path);
+  return Deno.dlopen(file.path, symbols);
 }
 
-// deno-lint-ignore ban-ts-comment
-// @ts-ignore
-export const core = Deno.core as UnstableCore;
 export const os = Deno.build.os;
 export const extensions: { [os in typeof Deno.build.os]: string } = {
   darwin: ".dylib",
