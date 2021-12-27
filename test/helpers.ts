@@ -24,12 +24,26 @@ export async function run(path: string) {
   };
 
   const lib = await Plug.prepare(options, {
-    test_sync: { parameters: [], result: "i8" },
+    test_i8_sync: { parameters: [], result: "i8" },
+    test_u8_sync: { parameters: [], result: "u8" },
+    test_i16_sync: { parameters: [], result: "i16" },
+    test_u16_sync: { parameters: [], result: "u16" },
+    test_i32_sync: { parameters: [], result: "i32" },
+    test_u32_sync: { parameters: [], result: "u32" },
+    test_pointer_sync: { parameters: [], result: "pointer" },
   });
 
-  const response = lib.symbols.test_sync();
+  assertEquals(lib.symbols.test_i8_sync(), -128);
+  assertEquals(lib.symbols.test_i16_sync(), -32768);
+  assertEquals(lib.symbols.test_i32_sync(), -2147483648);
 
-  assertEquals(response, 1);
+  assertEquals(lib.symbols.test_u8_sync(), 255);
+  assertEquals(lib.symbols.test_u16_sync(), 65535);
+  assertEquals(lib.symbols.test_u32_sync(), 4294967295);
+
+  const unsafePointer = lib.symbols.test_pointer_sync() as Deno.UnsafePointer
+  const unsafePointerView = new Deno.UnsafePointerView(unsafePointer)
+  assertEquals(unsafePointerView.getCString(), 'Hello, world!')
 }
 
 export function server(address: string) {
