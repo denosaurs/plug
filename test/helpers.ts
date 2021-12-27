@@ -28,7 +28,6 @@ export async function run(path: string) {
     test_i16_sync: { parameters: [], result: "i16" },
     test_i32_sync: { parameters: [], result: "i32" },
 
-
     test_u8_sync: { parameters: [], result: "u8" },
     test_u16_sync: { parameters: [], result: "u16" },
     test_u32_sync: { parameters: [], result: "u32" },
