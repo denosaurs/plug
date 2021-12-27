@@ -25,12 +25,17 @@ export async function run(path: string) {
 
   const lib = await Plug.prepare(options, {
     test_i8_sync: { parameters: [], result: "i8" },
-    test_u8_sync: { parameters: [], result: "u8" },
     test_i16_sync: { parameters: [], result: "i16" },
-    test_u16_sync: { parameters: [], result: "u16" },
     test_i32_sync: { parameters: [], result: "i32" },
+
+
+    test_u8_sync: { parameters: [], result: "u8" },
+    test_u16_sync: { parameters: [], result: "u16" },
     test_u32_sync: { parameters: [], result: "u32" },
-    test_pointer_sync: { parameters: [], result: "pointer" },
+
+    test_c_string_sync: { parameters: [], result: "pointer" },
+
+    test_struct_sync: { parameters: [], result: "pointer" },
   });
 
   assertEquals(lib.symbols.test_i8_sync(), -128);
@@ -41,9 +46,16 @@ export async function run(path: string) {
   assertEquals(lib.symbols.test_u16_sync(), 65535);
   assertEquals(lib.symbols.test_u32_sync(), 4294967295);
 
-  const unsafePointer = lib.symbols.test_pointer_sync() as Deno.UnsafePointer
-  const unsafePointerView = new Deno.UnsafePointerView(unsafePointer)
-  assertEquals(unsafePointerView.getCString(), 'Hello, world!')
+  const unsafeStringPointer = lib.symbols.test_c_string_sync() as Deno.UnsafePointer
+  const unsafeStringPointerView = new Deno.UnsafePointerView(unsafeStringPointer)
+  assertEquals(unsafeStringPointerView.getCString(), 'Hello, world!')
+
+  const unsafeStructPointer = lib.symbols.test_struct_sync() as Deno.UnsafePointer
+  const unsafeStructPointerView = new Deno.UnsafePointerView(unsafeStructPointer)
+  assertEquals(unsafeStructPointerView.getUint32(0), 1)
+  assertEquals(unsafeStructPointerView.getUint32(4), 2)
+  assertEquals(unsafeStructPointerView.getUint32(8), 3)
+  assertEquals(unsafeStructPointerView.getUint32(12), 4)
 }
 
 export function server(address: string) {
