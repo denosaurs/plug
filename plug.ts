@@ -1,8 +1,15 @@
-import { Cache, extname, green, parse } from "./deps.ts";
+import { Cache, extname, green } from "./deps.ts";
 
 export interface CrossOptions {
   name: string;
   urls: { [os in typeof Deno.build.os]?: string };
+  policy?: CachePolicy;
+  cache?: string;
+  log?: boolean;
+}
+
+export interface UrlOptions {
+  url: string;
   policy?: CachePolicy;
   cache?: string;
   log?: boolean;
@@ -16,7 +23,7 @@ export interface SingleOptions {
   log?: boolean;
 }
 
-export type Options = string | CrossOptions | SingleOptions;
+export type Options = string | UrlOptions | CrossOptions | SingleOptions;
 
 export type CachePolicy = "NONE" | "STORE";
 export const CachePolicy = {
@@ -56,10 +63,7 @@ export class PlugImportError extends Error {
 
 export async function download(options: Options): Promise<string> {
   if (typeof options === "string") {
-    options = {
-      name: parse(options).name,
-      url: options,
-    };
+    options = { url: options };
   }
 
   const directory = options.cache ?? Cache.options.directory;
@@ -81,9 +85,9 @@ export async function download(options: Options): Promise<string> {
   const pref = prefixes[os];
   const ext = extensions[os];
 
-  url = Object.values(extensions).includes(extname(url))
-    ? url
-    : `${url}${(url.endsWith("/") ? "" : "/")}${pref}${options.name}${ext}`;
+  if ("name" in options && !Object.values(extensions).includes(extname(url))) {
+    url = `${url}${(url.endsWith("/") ? "" : "/")}${pref}${options.name}${ext}`;
+  }
 
   const plug = Cache.namespace("plug");
   if ((options.log ?? true) && !(await plug.exists(url))) {
