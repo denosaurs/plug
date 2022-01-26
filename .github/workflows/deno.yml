@@ -47,7 +47,7 @@ jobs:
       uses: actions-rs/cargo@v1
       with:
         command: build
-        args: --manifest-path=test_plugin/Cargo.toml
+        args: --manifest-path=test_ffi/Cargo.toml
 
     - name: run deno test
       run: deno test -A --unstable

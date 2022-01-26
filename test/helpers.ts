@@ -4,22 +4,16 @@ import {
   assertEquals,
   Cache,
   dirname,
-  exists,
   fromFileUrl,
   join,
   resolve,
-  serve,
   serveFile,
 } from "../test_deps.ts";
 
 export async function run(path: string) {
   const options: Plug.Options = {
-    name: "test_plugin",
-    urls: {
-      darwin: `${path}/libtest_plugin.dylib`,
-      windows: `${path}/test_plugin.dll`,
-      linux: `${path}/libtest_plugin.so`,
-    },
+    name: "test_ffi",
+    url: path,
     cache: resolveTest("cache"),
   };
 
@@ -32,21 +26,25 @@ export async function run(path: string) {
   assertEquals(response, 1);
 }
 
-export function server(address: string) {
-  const server = serve(address);
+export function server(port: number) {
+  const server = Deno.listen({ port });
 
   (async () => {
-    for await (const request of server) {
-      console.log(request.url);
-      const response = await serveFile(
-        request,
-        resolve(`.${request.url}`),
-      );
-      await request.respond(response);
+    for await (const conn of server) {
+      (async () => {
+        for await (const { request, respondWith } of Deno.serveHttp(conn)) {
+          await respondWith(
+            await serveFile(
+              request,
+              resolve(`./${new URL(request.url).pathname}`),
+            ),
+          );
+        }
+      })();
     }
   })();
 
-  return server;
+  return () => server.close();
 }
 
 export function resolveTest(...path: string[]) {
@@ -81,7 +79,7 @@ export async function assertScript(
 
 export async function assertCache(): Promise<void> {
   const cache = resolveTest("cache");
-  assert(await exists(cache));
+  assert((await Deno.lstat(cache)).isDirectory);
 
   const files = [];
   for (const _ of Deno.readDirSync(cache)) {

@@ -1,4 +1,4 @@
-import { Cache, extname, green } from "./deps.ts";
+import { Cache, extname, green, parse } from "./deps.ts";
 
 export interface CrossOptions {
   name: string;
@@ -16,12 +16,25 @@ export interface SingleOptions {
   log?: boolean;
 }
 
-export type Options = CrossOptions | SingleOptions;
+export type Options = string | CrossOptions | SingleOptions;
 
-export enum CachePolicy {
-  NONE,
-  STORE,
-}
+export type CachePolicy = "NONE" | "STORE";
+export const CachePolicy = {
+  NONE: "NONE",
+  STORE: "STORE",
+} as const;
+
+export const os = Deno.build.os;
+export const extensions: { [os in typeof Deno.build.os]: string } = {
+  darwin: ".dylib",
+  linux: ".so",
+  windows: ".dll",
+};
+export const prefixes: { [os in typeof Deno.build.os]: string } = {
+  darwin: "lib",
+  linux: "lib",
+  windows: "",
+};
 
 export class PlugError extends Error {
   constructor(message: string) {
@@ -41,10 +54,14 @@ export class PlugImportError extends Error {
   }
 }
 
-export async function prepare<S extends Record<string, Deno.ForeignFunction>>(
-  options: Options,
-  symbols: S,
-): Promise<Deno.DynamicLibrary<S>> {
+export async function download(options: Options): Promise<string> {
+  if (typeof options === "string") {
+    options = {
+      name: parse(options).name,
+      url: options,
+    };
+  }
+
   const directory = options.cache ?? Cache.options.directory;
   const policy = options.policy === CachePolicy.NONE
     ? Cache.RELOAD_POLICY
@@ -74,17 +91,13 @@ export async function prepare<S extends Record<string, Deno.ForeignFunction>>(
   }
   const file = await plug.cache(url, policy);
 
-  return Deno.dlopen(file.path, symbols);
+  return file.path;
 }
 
-export const os = Deno.build.os;
-export const extensions: { [os in typeof Deno.build.os]: string } = {
-  darwin: ".dylib",
-  linux: ".so",
-  windows: ".dll",
-};
-export const prefixes: { [os in typeof Deno.build.os]: string } = {
-  darwin: "lib",
-  linux: "lib",
-  windows: "",
-};
+export async function prepare<S extends Record<string, Deno.ForeignFunction>>(
+  options: Options,
+  symbols: S,
+): Promise<Deno.DynamicLibrary<S>> {
+  const file = await download(options);
+  return Deno.dlopen(file, symbols);
+}

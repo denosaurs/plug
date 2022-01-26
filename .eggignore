@@ -1,6 +1,0 @@
-cache/**
-.github/**
-.git/**
-.editorconfig
-test_plugin/**
-test/**

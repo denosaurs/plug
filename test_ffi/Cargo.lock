@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "test_plugin"
-version = "0.0.1"
+name = "test_ffi"
+version = "0.1.0"

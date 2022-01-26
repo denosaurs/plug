@@ -100,7 +100,8 @@ The format is based on [Keep a Changelog], and this project adheres to
 ### Bug Fixes
 
 - add cache support ([`4e9d477`])
-- :globe: Make sure to guess the url only when the extension is relevant ([`5c559ae`])
+- :globe: Make sure to guess the url only when the extension is relevant
+  ([`5c559ae`])
 - :wrench: Minor tweak to fix file protocol urls ([`06ee6fb`])
 
 [keep a changelog]: https://keepachangelog.com/en/1.0.0/
