@@ -1,18 +1,17 @@
 export {
   assert,
   assertEquals,
-} from "https://deno.land/std@0.97.0/testing/asserts.ts";
+} from "https://deno.land/std@0.122.0/testing/asserts.ts";
 
-export { serve } from "https://deno.land/std@0.97.0/http/server.ts";
-export { serveFile } from "https://deno.land/std@0.97.0/http/file_server.ts";
+export { serveFile } from "https://deno.land/std@0.122.0/http/file_server.ts";
 
 export {
   dirname,
   fromFileUrl,
   join,
   resolve,
-} from "https://deno.land/std@0.97.0/path/mod.ts";
+} from "https://deno.land/std@0.122.0/path/mod.ts";
 
-export { exists } from "https://deno.land/std@0.97.0/fs/mod.ts";
+export { exists } from "https://deno.land/std@0.122.0/fs/mod.ts";
 
 export * as Cache from "https://deno.land/x/cache@0.2.13/mod.ts";

@@ -4,7 +4,7 @@ Deno.test({
   name: "remote | prepare",
   async fn(): Promise<void> {
     const address = "127.0.0.1:4500";
-    const remote = server(address);
+    const close = server(4500);
 
     await cleanCache();
     await assertScript("remote.ts", address);
@@ -12,7 +12,7 @@ Deno.test({
     await assertScript("remote.ts", address);
     await assertCache();
 
-    remote.close();
+    close();
   },
 });
 
