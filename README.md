@@ -41,6 +41,19 @@ const options: Plug.Options = {
   // linux: "https://example.com/some/path/libtest_lib.so"
 };
 
+// Also you can specify for certain architecture
+const options: Plug.Options = {
+  name: "test_lib",
+  urls: {
+    darwin: {
+      aarch64: `https://example.com/some/path/libtest_lib_aarch64.dylib`,
+      x86_64: `https://example.com/some/path/libtest_lib_x86_64.dylib`,
+    },
+    windows: `https://example.com/some/path/test_lib.dll`,
+    linux: `https://example.com/some/path/libtest_lib.so`,
+  },
+};
+
 // Drop-in replacement for `Deno.dlopen`
 const library = await Plug.prepare(options, {
   noop: { parameters: [], result: "void" },
