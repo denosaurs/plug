@@ -1,8 +1,12 @@
 import { Cache, extname, green } from "./deps.ts";
 
+export type ArchUrls = {
+  [arch in typeof Deno.build.arch]?: string;
+};
+
 export interface CrossOptions {
   name: string;
-  urls: { [os in typeof Deno.build.os]?: string };
+  urls: { [os in typeof Deno.build.os]?: string | ArchUrls };
   policy?: CachePolicy;
   cache?: string;
   log?: boolean;
@@ -32,6 +36,7 @@ export const CachePolicy = {
 } as const;
 
 export const os = Deno.build.os;
+export const arch = Deno.build.arch;
 export const extensions: { [os in typeof Deno.build.os]: string } = {
   darwin: ".dylib",
   linux: ".so",
@@ -74,9 +79,17 @@ export async function download(options: Options): Promise<string> {
 
   let url;
   if ("urls" in options) {
-    url = options.urls[os];
+    const _url = options.urls[os];
+    if (typeof _url === "string") {
+      url = _url;
+    } else if (_url) {
+      url = _url[arch];
+    }
+
     if (!url) {
-      throw new PlugImportError(`URL for "${os}" platform was not provided.`);
+      throw new PlugImportError(
+        `URL for "${arch}-${os}" platform was not provided.`,
+      );
     }
   } else {
     url = options.url;
