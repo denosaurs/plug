@@ -79,11 +79,9 @@ export async function download(options: Options): Promise<string> {
 
   let url;
   if ("urls" in options) {
-    const _url = options.urls[os];
-    if (typeof _url === "string") {
-      url = _url;
-    } else if (_url) {
-      url = _url[arch];
+    url = options.urls[os];
+    if (url !== undefined && typeof url !== "string") {
+      url = url[arch];
     }
 
     if (!url) {
