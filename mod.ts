@@ -1,1 +1,1 @@
-export * as Plug from "./plug.ts";
+export * from "./plug.ts";
