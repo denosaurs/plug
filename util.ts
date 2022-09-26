@@ -1,4 +1,4 @@
-import { hex, join } from "./deps.ts";
+import { hex, join, parse, fromFileUrl } from "./deps.ts";
 
 export const encoder = new TextEncoder();
 export const decoder = new TextDecoder();
@@ -13,12 +13,12 @@ export async function hash(value: string): Promise<string> {
   );
 }
 
-function baseUrlToFilename(url: URL): string {
+export function baseUrlToFilename(url: URL): string {
   const out = [];
-  const scheme = url.protocol.replace(":", "");
-  out.push(scheme);
+  const protocol = url.protocol.replace(":", "");
+  out.push(protocol);
 
-  switch (scheme) {
+  switch (protocol) {
     case "http":
     case "https": {
       const host = url.hostname;
@@ -26,19 +26,20 @@ function baseUrlToFilename(url: URL): string {
       out.push(hostPort ? `${host}_PORT${hostPort}` : host);
       break;
     }
+    case "file":
     case "data":
     case "blob":
       break;
     default:
       throw new TypeError(
-        `Don't know how to create cache name for scheme: ${scheme}`,
+        `Don't know how to create cache name for protocol: ${protocol}`,
       );
   }
 
   return join(...out);
 }
 
-export async function urlToFilename(url: URL) {
+export async function urlToFilename(url: URL): Promise<string> {
   const cacheFilename = baseUrlToFilename(url);
 
   let restStr = url.pathname;

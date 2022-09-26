@@ -2,7 +2,7 @@ import {
   assert,
   assertEquals,
   assertMatch,
-} from "https://deno.land/std@0.157.0/testing/asserts.ts";
+} from "./test_deps.ts";
 import { createDownloadURL } from "./download.ts";
 
 Deno.test("createDownloadURL", async ({ step }) => {
