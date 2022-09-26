@@ -1,8 +1,9 @@
 export type OsRecord<T> = { [os in typeof Deno.build.os]: T };
 export type ArchRecord<T> = { [os in typeof Deno.build.arch]: T };
-export type NestedCrossRecord<T> =
-  | OsRecord<T | ArchRecord<T>>
-  | ArchRecord<T | OsRecord<T>>;
+export type NestedCrossRecord<T> = Partial<
+  | OsRecord<T | Partial<ArchRecord<T>>>
+  | ArchRecord<T | Partial<OsRecord<T>>>
+>;
 
 /**
  * Where the plug cache is stored:
@@ -38,7 +39,7 @@ export interface URLOptions {
 }
 
 export interface CrossOptions {
-  url: Partial<NestedCrossRecord<string | URL>>;
+  url: NestedCrossRecord<string | URL>;
 }
 
 /**

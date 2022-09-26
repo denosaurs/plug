@@ -40,7 +40,6 @@ function baseUrlToFilename(url: URL): string {
 
 export async function urlToFilename(url: URL) {
   const cacheFilename = baseUrlToFilename(url);
-  console.log(cacheFilename);
 
   let restStr = url.pathname;
   const query = url.search;

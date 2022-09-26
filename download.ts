@@ -58,8 +58,8 @@ function denoCacheDir() {
 }
 
 function getCrossOption<T>(
-  record?: Partial<NestedCrossRecord<T>>,
-) {
+  record?: NestedCrossRecord<T>,
+): T | undefined {
   if (record === undefined) {
     return;
   }
@@ -77,7 +77,7 @@ function getCrossOption<T>(
     ) {
       return (subrecord as ArchRecord<T>)[Deno.build.arch];
     } else {
-      return subrecord;
+      return subrecord as T;
     }
   }
 
@@ -88,15 +88,12 @@ function getCrossOption<T>(
     const subrecord = record[Deno.build.arch];
 
     if (
-      typeof subrecord === "object" && (
-        "darwin" in subrecord ||
-        "linux" in subrecord ||
-        "windows" in subrecord
-      )
+      typeof subrecord === "object" &&
+      ("darwin" in subrecord || "linux" in subrecord || "windows" in subrecord)
     ) {
       return (subrecord as OsRecord<T>)[Deno.build.os];
     } else {
-      return subrecord;
+      return subrecord as T;
     }
   }
 }
@@ -139,7 +136,14 @@ export function createDownloadURL(options: DownloadOptions): URL {
         `An URL for the "${Deno.build.os}-${Deno.build.arch}" target was not provided.`,
       );
     }
-    url = new URL(tmpUrl);
+
+    if (typeof tmpUrl === "string") {
+      url = tmpUrl.startsWith("file://")
+        ? new URL(tmpUrl)
+        : toFileUrl(resolve(tmpUrl));
+    } else {
+      url = tmpUrl;
+    }
   }
 
   // Assemble automatic cross-platform named urls here
