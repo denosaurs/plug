@@ -8,6 +8,8 @@ import {
   isAbsolute,
   join,
   normalize,
+  resolve,
+  toFileUrl,
 } from "./deps.ts";
 import {
   ArchRecord,
@@ -118,14 +120,18 @@ export function createDownloadURL(options: DownloadOptions): URL {
   for (const key in options.extensions) {
     const os = key as typeof Deno.build.os;
     if (options.extensions[os] !== undefined) {
-      options.extensions[os] = options.extensions[os].replace(/.?(.+)/, "$1");
+      options.extensions[os] = options.extensions[os].replace(/\.?(.+)/, "$1");
     }
   }
 
   // Get the os-specific url
   let url: URL;
-  if (typeof options.url === "string" || options.url instanceof URL) {
-    url = new URL(options.url);
+  if (options.url instanceof URL) {
+    url = options.url;
+  } else if (typeof options.url === "string") {
+    url = options.url.startsWith("file://")
+      ? new URL(options.url)
+      : toFileUrl(resolve(options.url));
   } else {
     const tmpUrl = getCrossOption(options.url);
     if (tmpUrl === undefined) {
