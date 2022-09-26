@@ -1,4 +1,4 @@
-import { hex, join, parse, fromFileUrl } from "./deps.ts";
+import { fromFileUrl, hex, join, parse } from "./deps.ts";
 
 export const encoder = new TextEncoder();
 export const decoder = new TextDecoder();

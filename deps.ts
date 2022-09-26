@@ -4,9 +4,9 @@ export {
   isAbsolute,
   join,
   normalize,
+  parse,
   resolve,
   toFileUrl,
-  parse
 } from "https://deno.land/std@0.157.0/path/mod.ts";
 export { ensureDir } from "https://deno.land/std@0.157.0/fs/mod.ts";
 export { encode as hex } from "https://deno.land/std@0.157.0/encoding/hex.ts";

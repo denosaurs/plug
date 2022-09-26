@@ -1,8 +1,4 @@
-import {
-  assert,
-  assertEquals,
-  assertMatch,
-} from "./test_deps.ts";
+import { assert, assertEquals, assertMatch } from "./test_deps.ts";
 import { createDownloadURL } from "./download.ts";
 
 Deno.test("createDownloadURL", async ({ step }) => {
