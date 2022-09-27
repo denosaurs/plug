@@ -1,5 +1,5 @@
 import { normalize } from "./deps.ts";
-import { assert, assertEquals, assertMatch } from "./test_deps.ts";
+import { assertEquals } from "./test_deps.ts";
 import { hash, urlToFilename } from "./util.ts";
 
 Deno.test("hash", async () => {

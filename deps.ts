@@ -4,7 +4,6 @@ export {
   isAbsolute,
   join,
   normalize,
-  parse,
   resolve,
   toFileUrl,
 } from "https://deno.land/std@0.157.0/path/mod.ts";
