@@ -5,12 +5,104 @@
  * libraries if you so wish using a simple configuration which deviates from
  * the standard URL/string path input.
  *
+ * @example
+ * ```ts
+ * import { dlopen } from "https://deno.land/x/plug/mod.ts";
+ *
+ * // Drop-in replacement for `Deno.dlopen` which fetches the following depending
+ * // on operating system:
+ * // * darwin: "https://example.com/some/path/libexample.dylib"
+ * // * windows: "https://example.com/some/path/example.dll"
+ * // * linux: "https://example.com/some/path/libexample.so"
+ * const library = await dlopen("https://example.com/some/path/", {
+ *   noop: { parameters: [], result: "void" },
+ * });
+ *
+ * library.symbols.noop();
+ * ```
+ *
+ * @example
+ * ```ts
+ * import { dlopen, FetchOptions } from "https://deno.land/x/plug/mod.ts";
+ *
+ * // If you want plug to guess your binary names
+ * const options: FetchOptions = {
+ *   name: "example",
+ *   url: "https://example.com/some/path/",
+ *   // Becomes:
+ *   // darwin: "https://example.com/some/path/libexample.dylib"
+ *   // windows: "https://example.com/some/path/example.dll"
+ *   // linux: "https://example.com/some/path/libexample.so"
+ * };
+ *
+ * const library = await dlopen(options, {
+ *   noop: { parameters: [], result: "void" },
+ * });
+ *
+ * library.symbols.noop();
+ * ```
+ *
+ * @example
+ * ```ts
+ * import { dlopen, FetchOptions } from "https://deno.land/x/plug/mod.ts";
+ *
+ * // Also you can specify the path for certain architecture
+ * const options: FetchOptions = {
+ *   name: "example",
+ *   url: {
+ *     darwin: {
+ *       aarch64: `https://example.com/some/path/libexample.aarch64.dylib`,
+ *       x86_64: `https://example.com/some/path/libexample.x86_64.dylib`,
+ *     },
+ *     windows: `https://example.com/some/path/example.dll`,
+ *     linux: `https://example.com/some/path/libexample.so`,
+ *   },
+ * };
+ *
+ * await dlopen(options, {});
+ * ```
+ *
+ * @example
+ * ```ts
+ * import { dlopen, FetchOptions } from "https://deno.land/x/plug/mod.ts";
+ *
+ * // Or even configure plug to automatically guess the binary names for you,
+ * // even when there are special rules for naming on specific architectures
+ * const options: FetchOptions = {
+ *   name: "test",
+ *   url: "https://example.com/some/path/",
+ *   suffixes: {
+ *     darwin: {
+ *       aarch64: ".aarch64",
+ *       x86_64: ".x86_64",
+ *     },
+ *   },
+ *   // Becomes:
+ *   // darwin-aarch64: "https://example.com/some/path/libexample.aarch64.dylib"
+ *   // darwin-x86_64: "https://example.com/some/path/libexample.x86_64.dylib"
+ * };
+ *
+ * await dlopen(options, {});
+ * ```
+ *
  * @module
  */
 
 import { download } from "./download.ts";
-import { FetchOptions } from "./types.ts";
+import type { FetchOptions } from "./types.ts";
 
+export type {
+  ArchRecord,
+  CacheLocation,
+  CacheOptions,
+  CacheSetting,
+  CrossOptions,
+  FetchOptions,
+  NamedOptions,
+  NestedCrossRecord,
+  OsRecord,
+  URLOptions,
+} from "./types.ts";
 export { download } from "./download.ts";
 
 /**
@@ -18,6 +110,29 @@ export { download } from "./download.ts";
  * {@link Deno.dlopen} yet with extended functionality allowing you to use
  * remote (or local) binaries, automatically building the binary name and
  * controlling the caching policy.
+ *
+ * @example
+ * ```ts
+ * import { dlopen, FetchOptions } from "https://deno.land/x/plug/mod.ts";
+ *
+ * // Configure plug to automatically guess the binary names for you, even when
+ * // there for example are special rules for naming on specific architectures
+ * const options: FetchOptions = {
+ *   name: "test",
+ *   url: "https://example.com/some/path/",
+ *   suffixes: {
+ *     darwin: {
+ *       aarch64: ".aarch64",
+ *       x86_64: ".x86_64",
+ *     },
+ *   },
+ *   // Becomes:
+ *   // darwin-aarch64: "https://example.com/some/path/libexample.aarch64.dylib"
+ *   // darwin-x86_64: "https://example.com/some/path/libexample.x86_64.dylib"
+ * };
+ *
+ * await dlopen(options, {});
+ * ```
  *
  * @param options See {@link FetchOptions}
  * @param symbols A record extending {@link Deno.ForeignLibraryInterface}
