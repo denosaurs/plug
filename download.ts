@@ -72,7 +72,7 @@ function getCrossOption<T>(
     const subrecord = record[Deno.build.os];
 
     if (
-      typeof subrecord === "object" &&
+      subrecord && typeof subrecord === "object" &&
       ("x86_64" in subrecord || "aarch64" in subrecord)
     ) {
       return (subrecord as ArchRecord<T>)[Deno.build.arch];
@@ -88,7 +88,7 @@ function getCrossOption<T>(
     const subrecord = record[Deno.build.arch];
 
     if (
-      typeof subrecord === "object" &&
+      subrecord && typeof subrecord === "object" &&
       ("darwin" in subrecord || "linux" in subrecord || "windows" in subrecord)
     ) {
       return (subrecord as OsRecord<T>)[Deno.build.os];
