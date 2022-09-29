@@ -36,18 +36,5 @@ jobs:
       with:
         deno-version: v1.x
 
-    - name: Install stable rust toolchain
-      uses: actions-rs/toolchain@v1
-      with:
-        profile: minimal
-        toolchain: stable
-        override: true
-
-    - name: Run cargo build
-      uses: actions-rs/cargo@v1
-      with:
-        command: build
-        args: --manifest-path=test_ffi/Cargo.toml
-
     - name: run deno test
       run: deno test -A --unstable

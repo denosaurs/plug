@@ -1,4 +1,12 @@
-export { extname } from "https://deno.land/std@0.122.0/path/mod.ts";
-export { green } from "https://deno.land/std@0.122.0/fmt/colors.ts";
-
-export * as Cache from "https://deno.land/x/cache@0.2.13/mod.ts";
+export {
+  extname,
+  fromFileUrl,
+  isAbsolute,
+  join,
+  normalize,
+  resolve,
+  toFileUrl,
+} from "https://deno.land/std@0.157.0/path/mod.ts";
+export { ensureDir } from "https://deno.land/std@0.157.0/fs/mod.ts";
+export { encode as hex } from "https://deno.land/std@0.157.0/encoding/hex.ts";
+export * as colors from "https://deno.land/std@0.157.0/fmt/colors.ts";
