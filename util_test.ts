@@ -1,6 +1,5 @@
-import { normalize } from "./deps.ts";
-import { assertEquals } from "./test_deps.ts";
-import { hash, urlToFilename } from "./util.ts";
+import { assert, assertEquals, assertRejects, normalize, fromFileUrl } from "./test_deps.ts";
+import { hash, urlToFilename, isFile } from "./util.ts";
 
 Deno.test("hash", async () => {
   assertEquals(
@@ -17,6 +16,18 @@ Deno.test("urlToFilename", async ({ step }) => {
         "http/example.com/59338ff59a9d830098ca938e773c9181f03cecb659c2e4ebb0f03e452ba7658a",
       ),
     );
+    assertEquals(
+      await urlToFilename(new URL("http://example.com/example.dll?query")),
+      normalize(
+        "http/example.com/f85568c6e0b75ad60bc9c146a679cd30c8e80c05c43d9dbdd788ede9f7a11c14",
+      ),
+    );
+    assertEquals(
+      await urlToFilename(new URL("http://example.com:8000/example.dll")),
+      normalize(
+        "http/example.com_PORT8000/59338ff59a9d830098ca938e773c9181f03cecb659c2e4ebb0f03e452ba7658a",
+      ),
+    );
   });
 
   await step("https", async () => {
@@ -24,6 +35,18 @@ Deno.test("urlToFilename", async ({ step }) => {
       await urlToFilename(new URL("https://example.com/example.dll")),
       normalize(
         "https/example.com/59338ff59a9d830098ca938e773c9181f03cecb659c2e4ebb0f03e452ba7658a",
+      ),
+    );
+    assertEquals(
+      await urlToFilename(new URL("https://example.com/example.dll?query")),
+      normalize(
+        "https/example.com/f85568c6e0b75ad60bc9c146a679cd30c8e80c05c43d9dbdd788ede9f7a11c14",
+      ),
+    );
+    assertEquals(
+      await urlToFilename(new URL("https://example.com:8000/example.dll")),
+      normalize(
+        "https/example.com_PORT8000/59338ff59a9d830098ca938e773c9181f03cecb659c2e4ebb0f03e452ba7658a",
       ),
     );
   });
@@ -49,5 +72,22 @@ Deno.test("urlToFilename", async ({ step }) => {
         "file/bfb7be7a0a041e8ffbdfee2db02c4e5ef5fa7e0c5b283f92de2f071ecfcad421",
       ),
     );
+  });
+
+  await step("invalid protocol", async () => {
+    await assertRejects(() => urlToFilename(new URL("error:///example/abc/example.dll")), TypeError, "Don't know how to create cache name for protocol: error");
+  });
+});
+
+Deno.test("isFile", async ({ step }) => {
+  await step("true", async () => {
+    assert(await isFile("./util_test.ts"));
+    assert(await isFile(fromFileUrl(import.meta.url)));
+    assert(await isFile(fromFileUrl(new URL("mod.ts", import.meta.url))));
+  });
+
+  await step("false", async () => {
+    assert(!await isFile("./this_file_does_not_exist"));
+    assert(!await isFile(fromFileUrl(new URL("this_file_does_not_exist", import.meta.url))));
   });
 });

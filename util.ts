@@ -13,7 +13,7 @@ export async function hash(value: string): Promise<string> {
   );
 }
 
-export function baseUrlToFilename(url: URL): string {
+function baseUrlToFilename(url: URL): string {
   const out = [];
   const protocol = url.protocol.replace(":", "");
   out.push(protocol);
