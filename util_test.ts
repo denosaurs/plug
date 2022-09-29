@@ -1,5 +1,11 @@
-import { assert, assertEquals, assertRejects, normalize, fromFileUrl } from "./test_deps.ts";
-import { hash, urlToFilename, isFile } from "./util.ts";
+import {
+  assert,
+  assertEquals,
+  assertRejects,
+  fromFileUrl,
+  normalize,
+} from "./test_deps.ts";
+import { hash, isFile, urlToFilename } from "./util.ts";
 
 Deno.test("hash", async () => {
   assertEquals(
@@ -75,7 +81,11 @@ Deno.test("urlToFilename", async ({ step }) => {
   });
 
   await step("invalid protocol", async () => {
-    await assertRejects(() => urlToFilename(new URL("error:///example/abc/example.dll")), TypeError, "Don't know how to create cache name for protocol: error");
+    await assertRejects(
+      () => urlToFilename(new URL("error:///example/abc/example.dll")),
+      TypeError,
+      "Don't know how to create cache name for protocol: error",
+    );
   });
 });
 
@@ -88,6 +98,10 @@ Deno.test("isFile", async ({ step }) => {
 
   await step("false", async () => {
     assert(!await isFile("./this_file_does_not_exist"));
-    assert(!await isFile(fromFileUrl(new URL("this_file_does_not_exist", import.meta.url))));
+    assert(
+      !await isFile(
+        fromFileUrl(new URL("this_file_does_not_exist", import.meta.url)),
+      ),
+    );
   });
 });

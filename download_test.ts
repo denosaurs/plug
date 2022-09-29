@@ -1,5 +1,25 @@
-import { assert, assertEquals, assertMatch } from "./test_deps.ts";
-import { createDownloadURL } from "./download.ts";
+import {
+  assert,
+  assertEquals,
+  assertMatch,
+  assertRejects,
+  basename,
+  dirname,
+  normalize,
+} from "./test_deps.ts";
+import { createDownloadURL, ensureCacheLocation } from "./download.ts";
+
+async function isDirectory(filePath: string): Promise<boolean> {
+  try {
+    const stats = await Deno.lstat(filePath);
+    return stats.isDirectory;
+  } catch (err) {
+    if (err instanceof Deno.errors.NotFound) {
+      return false;
+    }
+    throw err;
+  }
+}
 
 Deno.test("createDownloadURL", async ({ step }) => {
   await step("string", () => {
@@ -117,5 +137,60 @@ Deno.test("createDownloadURL", async ({ step }) => {
     //@ts-ignore TS2540
     // Restore the snapshot of `Deno.build`
     Deno.build = build;
+  });
+});
+
+Deno.test("ensureCacheLocation", async ({ step }) => {
+  await step("deno", async () => {
+    const location = await ensureCacheLocation("deno");
+    assertEquals(basename(location), "plug");
+    assertEquals(basename(dirname(location)), "deno");
+    assert(await isDirectory(location));
+  });
+
+  await step("cwd", async () => {
+    const location = await ensureCacheLocation("cwd");
+    assertEquals(basename(location), "plug");
+    assertEquals(normalize(dirname(location)), Deno.cwd());
+    assert(await isDirectory(location));
+  });
+
+  await step("cache", async () => {
+    const location = await ensureCacheLocation("cache");
+    assertEquals(basename(location), "plug");
+    assert(await isDirectory(location));
+  });
+
+  await step("tmp", async () => {
+    const location = await ensureCacheLocation("tmp");
+    assert(basename(location).startsWith("plug"));
+    assert(await isDirectory(location));
+  });
+
+  await step("string", async () => {
+    const location = await ensureCacheLocation("./plug/cache/");
+    assertEquals(basename(location), "cache");
+    assertEquals(basename(dirname(location)), "plug");
+    assertEquals(normalize(dirname(dirname(location))), Deno.cwd());
+    assert(await isDirectory(location));
+  });
+
+  await step("URL", async () => {
+    const location = await ensureCacheLocation(
+      new URL("./plug/cache/url", import.meta.url),
+    );
+    assertEquals(basename(location), "url");
+    assertEquals(basename(dirname(location)), "cache");
+    assertEquals(basename(dirname(dirname(location))), "plug");
+    assertEquals(normalize(dirname(dirname(dirname(location)))), Deno.cwd());
+    assert(await isDirectory(location));
+  });
+
+  await step("invalid protocol", async () => {
+    await assertRejects(
+      () => ensureCacheLocation(new URL("https://example.com/")),
+      TypeError,
+      "Cannot use any other protocol than file:// for an URL cache location.",
+    );
   });
 });

@@ -206,12 +206,10 @@ export async function ensureCacheLocation(
     location = join(Deno.cwd(), "plug");
   } else if (location === "tmp") {
     location = await Deno.makeTempDir({ prefix: "plug" });
-  } else if (typeof location === "string") {
-    if (location.startsWith("file://")) {
-      location = fromFileUrl(location);
-    }
-  } else {
-    if (location?.protocol !== "file") {
+  } else if (typeof location === "string" && location.startsWith("file://")) {
+    location = fromFileUrl(location);
+  } else if (location instanceof URL) {
+    if (location?.protocol !== "file:") {
       throw new TypeError(
         "Cannot use any other protocol than file:// for an URL cache location.",
       );
@@ -220,7 +218,8 @@ export async function ensureCacheLocation(
     location = fromFileUrl(location);
   }
 
-  location = normalize(location);
+  location = resolve(normalize(location));
+
   await ensureDir(location);
 
   return location;

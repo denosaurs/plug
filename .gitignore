@@ -12,3 +12,9 @@ test/cache
 
 # rust target
 target
+
+# coverage
+coverage/
+
+# plug cache
+plug/
