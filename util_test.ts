@@ -25,7 +25,7 @@ Deno.test("urlToFilename", async ({ step }) => {
     assertEquals(
       await urlToFilename(new URL("http://example.com/example.dll?query")),
       normalize(
-        "http/example.com/f85568c6e0b75ad60bc9c146a679cd30c8e80c05c43d9dbdd788ede9f7a11c14",
+        "http/example.com/1a09f794c64f412ec501e93217c3b00f9e708a80dc6ed97f24536730bd6faab5",
       ),
     );
     assertEquals(
@@ -46,7 +46,7 @@ Deno.test("urlToFilename", async ({ step }) => {
     assertEquals(
       await urlToFilename(new URL("https://example.com/example.dll?query")),
       normalize(
-        "https/example.com/f85568c6e0b75ad60bc9c146a679cd30c8e80c05c43d9dbdd788ede9f7a11c14",
+        "https/example.com/1a09f794c64f412ec501e93217c3b00f9e708a80dc6ed97f24536730bd6faab5",
       ),
     );
     assertEquals(

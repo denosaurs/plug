@@ -41,13 +41,7 @@ function baseUrlToFilename(url: URL): string {
 
 export async function urlToFilename(url: URL): Promise<string> {
   const cacheFilename = baseUrlToFilename(url);
-
-  let restStr = url.pathname;
-  const query = url.search;
-  if (query) {
-    restStr += `?${query}`;
-  }
-  const hashedFilename = await hash(restStr);
+  const hashedFilename = await hash(url.pathname + url.search);
   return join(cacheFilename, hashedFilename);
 }
 
