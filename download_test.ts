@@ -71,7 +71,7 @@ Deno.test("createDownloadURL", async ({ step }) => {
     await step("arch", async ({ step }) => {
       for (const arch of ["x86_64", "aarch64"]) {
         await step(arch, async ({ step }) => {
-          //@ts-ignore TS2540
+          // @ts-ignore TS2540
           Deno.build = { arch };
           const result = createDownloadURL({
             url: {
@@ -82,7 +82,7 @@ Deno.test("createDownloadURL", async ({ step }) => {
 
           for (const os of ["darwin", "linux", "windows"]) {
             await step(os, () => {
-              //@ts-ignore TS2540
+              // @ts-ignore TS2540
               Deno.build = {
                 arch,
                 os,
@@ -104,7 +104,7 @@ Deno.test("createDownloadURL", async ({ step }) => {
     await step("os", async ({ step }) => {
       for (const os of ["darwin", "linux", "windows"]) {
         await step(os, async ({ step }) => {
-          //@ts-ignore TS2540
+          // @ts-ignore TS2540
           Deno.build = { os };
           const result = createDownloadURL({
             url: {
@@ -115,7 +115,7 @@ Deno.test("createDownloadURL", async ({ step }) => {
 
           for (const arch of ["x86_64", "aarch64"]) {
             await step(arch, () => {
-              //@ts-ignore TS2540
+              // @ts-ignore TS2540
               Deno.build = {
                 arch,
                 os,
@@ -134,7 +134,7 @@ Deno.test("createDownloadURL", async ({ step }) => {
       }
     });
 
-    //@ts-ignore TS2540
+    // @ts-ignore TS2540
     // Restore the snapshot of `Deno.build`
     Deno.build = build;
   });

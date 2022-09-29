@@ -2,10 +2,21 @@ import {
   assert,
   assertEquals,
   assertRejects,
+  assertThrows,
+  basename,
+  dirname,
   fromFileUrl,
+  join,
   normalize,
 } from "./test_deps.ts";
-import { hash, isFile, urlToFilename } from "./util.ts";
+import {
+  cacheDir,
+  denoCacheDir,
+  hash,
+  homeDir,
+  isFile,
+  urlToFilename,
+} from "./util.ts";
 
 Deno.test("hash", async () => {
   assertEquals(
@@ -104,4 +115,180 @@ Deno.test("isFile", async ({ step }) => {
       ),
     );
   });
+});
+
+Deno.test("homeDir", async ({ step }) => {
+  // Save a snapshot of `Deno.build`
+  const build = structuredClone(Deno.build);
+  const home = join(Deno.cwd(), "plug", "home");
+
+  await step("windows", () => {
+    // @ts-ignore TS2540
+    Deno.build = { os: "windows" };
+    Deno.env.set("USERPROFILE", home);
+
+    assertEquals(homeDir(), home);
+
+    Deno.env.delete("USERPROFILE");
+  });
+
+  for (const os of ["linux", "darwin"]) {
+    await step(os, () => {
+      // @ts-ignore TS2540
+      Deno.build = { os };
+      Deno.env.set("HOME", home);
+
+      assertEquals(homeDir(), home);
+
+      Deno.env.delete("HOME");
+    });
+  }
+
+  await step("unreachable", () => {
+    // @ts-ignore TS2540
+    Deno.build = { os: "freebsd" };
+    assertThrows(() => homeDir(), Error, "unreachable");
+  });
+
+  // @ts-ignore TS2540
+  // Restore the snapshot of `Deno.build`
+  Deno.build = build;
+});
+
+Deno.test("cacheDir", async ({ step }) => {
+  // Save a snapshot of `Deno.build`
+  const build = structuredClone(Deno.build);
+  const cache = join(Deno.cwd(), "plug", "cache");
+
+  await step("windows", () => {
+    // @ts-ignore TS2540
+    Deno.build = { os: "windows" };
+    Deno.env.set("LOCALAPPDATA", cache);
+
+    const dir = cacheDir();
+    assert(dir);
+    assertEquals(dir, cache);
+
+    Deno.env.delete("LOCALAPPDATA");
+  });
+
+  await step("darwin", () => {
+    // @ts-ignore TS2540
+    Deno.build = { os: "darwin" };
+    Deno.env.set("HOME", cache);
+
+    const dir = cacheDir();
+    assert(dir);
+    assertEquals(basename(dir), "Caches");
+    assertEquals(basename(dirname(dir)), "Library");
+    assertEquals(basename(dirname(dirname(dir))), "cache");
+    assertEquals(basename(dirname(dirname(dirname(dir)))), "plug");
+
+    Deno.env.delete("HOME");
+  });
+
+  await step("linux", async ({ step }) => {
+    // @ts-ignore TS2540
+    Deno.build = { os: "linux" };
+
+    await step("XDG_CACHE_HOME", () => {
+      Deno.env.set("XDG_CACHE_HOME", cache);
+
+      const dir = cacheDir();
+      assertEquals(dir, cache);
+
+      Deno.env.delete("XDG_CACHE_HOME");
+    });
+
+    await step("HOME", () => {
+      Deno.env.set("HOME", cache);
+
+      const dir = cacheDir();
+      assert(dir);
+      assertEquals(basename(dir), ".cache");
+      assertEquals(basename(dirname(dir)), "cache");
+      assertEquals(basename(dirname(dirname(dir))), "plug");
+
+      Deno.env.delete("HOME");
+    });
+  });
+
+  await step("unreachable", () => {
+    // @ts-ignore TS2540
+    Deno.build = { os: "freebsd" };
+    assertThrows(() => homeDir(), Error, "unreachable");
+  });
+
+  // @ts-ignore TS2540
+  // Restore the snapshot of `Deno.build`
+  Deno.build = build;
+});
+
+Deno.test("denoCacheDir", async ({ step }) => {
+  // Save a snapshot of `Deno.build`
+  const build = structuredClone(Deno.build);
+  // @ts-ignore TS2540
+  Deno.build = { os: "linux" };
+
+  await step("DENO_DIR", async ({ step }) => {
+    await step("relative", () => {
+      Deno.env.set("DENO_DIR", "./plug/cache/deno");
+
+      const dir = denoCacheDir();
+      assert(dir);
+      assertEquals(dir, normalize(join(Deno.cwd(), "./plug/cache/deno")));
+
+      Deno.env.delete("DENO_DIR");
+    });
+
+    await step("absolute", () => {
+      Deno.env.set("DENO_DIR", "/plug/cache/deno");
+
+      const dir = denoCacheDir();
+      assert(dir);
+      assertEquals(dir, normalize("/plug/cache/deno"));
+
+      Deno.env.delete("DENO_DIR");
+    });
+  });
+
+  await step("cacheDir", () => {
+    const cache = join(Deno.cwd(), "plug");
+    Deno.env.set("HOME", cache);
+
+    const dir = denoCacheDir();
+    assert(dir);
+    assertEquals(basename(dir), "deno");
+    assertEquals(basename(dirname(dir)), ".cache");
+    assertEquals(basename(dirname(dirname(dir))), "plug");
+
+    Deno.env.delete("HOME");
+  });
+
+  await step("homeDir", () => {
+    // @ts-ignore TS2540
+    Deno.build = { os: "windows" };
+
+    const cache = join(Deno.cwd(), "plug");
+    Deno.env.set("USERPROFILE", cache);
+
+    const dir = denoCacheDir();
+    assert(dir);
+    assertEquals(basename(dir), ".deno");
+    assertEquals(basename(dirname(dir)), "plug");
+
+    Deno.env.delete("USERPROFILE");
+  });
+
+  await step("undefined", () => {
+    // @ts-ignore TS2540
+    Deno.build = { os: "linux" };
+
+    const dir = denoCacheDir();
+    assert(dir === undefined);
+  });
+
+  // @ts-ignore TS2540
+  // Restore the snapshot of `Deno.build`
+  Deno.build = build;
 });

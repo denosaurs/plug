@@ -1,11 +1,8 @@
 import {
-  cacheDir,
   colors,
   ensureDir,
   extname,
   fromFileUrl,
-  homeDir,
-  isAbsolute,
   join,
   normalize,
   resolve,
@@ -18,7 +15,7 @@ import {
   NestedCrossRecord,
   OsRecord,
 } from "./types.ts";
-import { isFile, urlToFilename } from "./util.ts";
+import { cacheDir, denoCacheDir, isFile, urlToFilename } from "./util.ts";
 
 export const defaultExtensions: OsRecord<string> = {
   darwin: "dylib",
@@ -31,31 +28,6 @@ export const defaultPrefixes: OsRecord<string> = {
   linux: "lib",
   windows: "",
 };
-
-function denoCacheDir() {
-  Deno.permissions.request({ name: "env", variable: "DENO_DIR" });
-  const dd = Deno.env.get("DENO_DIR");
-  let root;
-  if (dd) {
-    if (!isAbsolute(dd)) {
-      root = normalize(join(Deno.cwd(), dd));
-    } else {
-      root = dd;
-    }
-  } else {
-    const cd = cacheDir();
-    if (cd) {
-      root = join(cd, "deno");
-    } else {
-      const hd = homeDir();
-      if (hd) {
-        root = join(hd, ".deno");
-      }
-    }
-  }
-
-  return root;
-}
 
 function getCrossOption<T>(
   record?: NestedCrossRecord<T>,
