@@ -11,7 +11,7 @@ import {
 import {
   ArchRecord,
   CacheLocation,
-  DownloadOptions,
+  FetchOptions,
   NestedCrossRecord,
   OsRecord,
 } from "./types.ts";
@@ -71,12 +71,12 @@ function getCrossOption<T>(
 }
 
 /**
- * Creates a cross-platform url for the specified options.
+ * Creates a cross-platform url for the specified options
  *
- * @param options See {@link DownloadOptions}
+ * @param options See {@link FetchOptions}
  * @returns A fully specified url to the specified file
  */
-export function createDownloadURL(options: DownloadOptions): URL {
+export function createDownloadURL(options: FetchOptions): URL {
   if (typeof options === "string" || options instanceof URL) {
     options = { url: options };
   }
@@ -198,12 +198,12 @@ export async function ensureCacheLocation(
 }
 
 /**
- * Downloads a file using the specified {@link DownloadOptions}
+ * Downloads a file using the specified {@link FetchOptions}
  *
- * @param options See {@link DownloadOptions}
+ * @param options See {@link FetchOptions}
  * @returns The path to the downloaded file in its cached location
  */
-export async function download(options: DownloadOptions): Promise<string> {
+export async function download(options: FetchOptions): Promise<string> {
   const location =
     (typeof options === "object" && "location" in options
       ? options.location
