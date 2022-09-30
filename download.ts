@@ -245,10 +245,10 @@ export async function download(options: FetchOptions): Promise<string> {
           }
         }
 
-        const file = await Deno.create(cacheFilePath);
-        await response.body!.pipeTo(file.writable);
-        file.close();
-
+        await Deno.writeFile(
+          cacheFilePath,
+          new Uint8Array(await response.arrayBuffer()),
+        );
         break;
       }
 
