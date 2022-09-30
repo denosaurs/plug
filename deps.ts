@@ -1,4 +1,5 @@
 export {
+  dirname,
   extname,
   fromFileUrl,
   isAbsolute,
