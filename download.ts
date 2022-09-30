@@ -1,5 +1,6 @@
 import {
   colors,
+  dirname,
   ensureDir,
   extname,
   fromFileUrl,
@@ -223,7 +224,7 @@ export async function download(options: FetchOptions): Promise<string> {
     ? await isFile(cacheFilePath)
     : setting === "only" || setting !== "reloadAll";
 
-  await ensureDir(cacheBasePath);
+  await ensureDir(dirname(cacheBasePath));
 
   if (!cached) {
     const meta = { url };
