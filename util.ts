@@ -1,4 +1,11 @@
-import { hex, isAbsolute, join, normalize } from "./deps.ts";
+import {
+  hex,
+  isAbsolute,
+  join,
+  normalize,
+  resolve,
+  toFileUrl,
+} from "./deps.ts";
 
 export const encoder = new TextEncoder();
 export const decoder = new TextDecoder();
@@ -27,6 +34,15 @@ function baseUrlToFilename(url: URL): string {
   }
 
   return join(...out);
+}
+
+export function stringToURL(url: string): URL {
+  // deno-fmt-ignore
+  return url.startsWith("file://")
+      || url.startsWith("http://")
+      || url.startsWith("https://")
+    ? new URL(url)
+    : toFileUrl(resolve(url));
 }
 
 export async function hash(value: string): Promise<string> {

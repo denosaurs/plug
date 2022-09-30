@@ -22,23 +22,63 @@ async function isDirectory(filePath: string): Promise<boolean> {
 }
 
 Deno.test("createDownloadURL", async ({ step }) => {
-  await step("string", () => {
-    const path = "./test/example";
-    const result = createDownloadURL(path);
-    assert(result.pathname.endsWith("/test/example"));
+  await step("string", async ({ step }) => {
+    await step("relative", () => {
+      const path = "./test/example";
+      const result = createDownloadURL(path);
+      assertEquals(
+        result.toString(),
+        new URL("./test/example", import.meta.url).toString(),
+      );
+    });
+
+    await step("file", () => {
+      const path = "file:///test/example";
+      const result = createDownloadURL(path);
+      assertEquals(result.toString(), "file:///test/example");
+    });
+
+    await step("http", () => {
+      const path = "http://example.com/example";
+      const result = createDownloadURL(path);
+      assertEquals(result.toString(), "http://example.com/example");
+    });
+
+    await step("https", () => {
+      const path = "https://example.com/example";
+      const result = createDownloadURL(path);
+      assertEquals(result.toString(), "https://example.com/example");
+    });
   });
 
-  await step("URL", () => {
-    const path = new URL("file://./test/example");
-    const result = createDownloadURL(path);
-    assertEquals(result, path);
+  await step("URL", async ({ step }) => {
+    await step("file", () => {
+      const path = new URL("file:///test/example");
+      const result = createDownloadURL(path);
+      assertEquals(result.toString(), "file:///test/example");
+    });
+
+    await step("http", () => {
+      const path = new URL("http://example.com/example");
+      const result = createDownloadURL(path);
+      assertEquals(result.toString(), "http://example.com/example");
+    });
+
+    await step("https", () => {
+      const path = new URL("https://example.com/example");
+      const result = createDownloadURL(path);
+      assertEquals(result.toString(), "https://example.com/example");
+    });
   });
 
   await step("URLOptions", async ({ step }) => {
     await step("string", () => {
       const path = "./test/example";
       const result = createDownloadURL({ url: path });
-      assert(result.pathname.endsWith("/test/example"));
+      assertEquals(
+        result.toString(),
+        new URL("./test/example", import.meta.url).toString(),
+      );
     });
 
     await step("URL", () => {

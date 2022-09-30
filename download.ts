@@ -7,7 +7,6 @@ import {
   join,
   normalize,
   resolve,
-  toFileUrl,
 } from "./deps.ts";
 import {
   ArchRecord,
@@ -16,7 +15,13 @@ import {
   NestedCrossRecord,
   OsRecord,
 } from "./types.ts";
-import { cacheDir, denoCacheDir, isFile, urlToFilename } from "./util.ts";
+import {
+  cacheDir,
+  denoCacheDir,
+  isFile,
+  stringToURL,
+  urlToFilename,
+} from "./util.ts";
 
 export const defaultExtensions: OsRecord<string> = {
   darwin: "dylib",
@@ -99,9 +104,7 @@ export function createDownloadURL(options: FetchOptions): URL {
   if (options.url instanceof URL) {
     url = options.url;
   } else if (typeof options.url === "string") {
-    url = options.url.startsWith("file://")
-      ? new URL(options.url)
-      : toFileUrl(resolve(options.url));
+    url = stringToURL(options.url);
   } else {
     const tmpUrl = getCrossOption(options.url);
     if (tmpUrl === undefined) {
@@ -111,9 +114,7 @@ export function createDownloadURL(options: FetchOptions): URL {
     }
 
     if (typeof tmpUrl === "string") {
-      url = tmpUrl.startsWith("file://")
-        ? new URL(tmpUrl)
-        : toFileUrl(resolve(tmpUrl));
+      url = stringToURL(tmpUrl);
     } else {
       url = tmpUrl;
     }
@@ -244,10 +245,10 @@ export async function download(options: FetchOptions): Promise<string> {
           }
         }
 
-        const file = await Deno.create(cacheFilePath);
-        await response.body!.pipeTo(file.writable);
-        file.close();
-
+        await Deno.writeFile(
+          cacheFilePath,
+          new Uint8Array(await response.arrayBuffer()),
+        );
         break;
       }
 

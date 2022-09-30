@@ -15,6 +15,7 @@ import {
   hash,
   homeDir,
   isFile,
+  stringToURL,
   urlToFilename,
 } from "./util.ts";
 
@@ -23,6 +24,35 @@ Deno.test("hash", async () => {
     await hash("hello_world"),
     "35072c1ae546350e0bfa7ab11d49dc6f129e72ccd57ec7eb671225bbd197c8f1",
   );
+});
+
+Deno.test("stringToURL", async ({ step }) => {
+  await step("relative", () => {
+    const path = "./test/example";
+    const result = stringToURL(path);
+    assertEquals(
+      result.toString(),
+      new URL("./test/example", import.meta.url).toString(),
+    );
+  });
+
+  await step("file", () => {
+    const path = "file:///test/example";
+    const result = stringToURL(path);
+    assertEquals(result.toString(), "file:///test/example");
+  });
+
+  await step("http", () => {
+    const path = "http://example.com/example";
+    const result = stringToURL(path);
+    assertEquals(result.toString(), "http://example.com/example");
+  });
+
+  await step("https", () => {
+    const path = "https://example.com/example";
+    const result = stringToURL(path);
+    assertEquals(result.toString(), "https://example.com/example");
+  });
 });
 
 Deno.test("urlToFilename", async ({ step }) => {
