@@ -7,6 +7,7 @@ import {
   normalize,
   resolve,
   toFileUrl,
+  basename
 } from "./deps.ts";
 import {
   ArchRecord,
@@ -223,7 +224,7 @@ export async function download(options: FetchOptions): Promise<string> {
     ? await isFile(cacheFilePath)
     : setting === "only" || setting !== "reloadAll";
 
-  await ensureDir(cacheBasePath);
+  await ensureDir(basename(cacheBasePath));
 
   if (!cached) {
     const meta = { url };
