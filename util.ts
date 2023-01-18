@@ -79,11 +79,9 @@ export async function isFile(filePath: string): Promise<boolean> {
 export function homeDir(): string | undefined {
   switch (Deno.build.os) {
     case "windows":
-      Deno.permissions.request({ name: "env", variable: "USERPROFILE" });
       return Deno.env.get("USERPROFILE");
     case "linux":
     case "darwin":
-      Deno.permissions.request({ name: "env", variable: "HOME" });
       return Deno.env.get("HOME");
     default:
       throw Error("unreachable");
@@ -97,7 +95,6 @@ export function cacheDir(): string | undefined {
       return join(home, "Library/Caches");
     }
   } else if (Deno.build.os === "linux") {
-    Deno.permissions.request({ name: "env", variable: "XDG_CACHE_HOME" });
     const cacheHome = Deno.env.get("XDG_CACHE_HOME");
     if (cacheHome) {
       return cacheHome;
@@ -108,13 +105,11 @@ export function cacheDir(): string | undefined {
       }
     }
   } else {
-    Deno.permissions.request({ name: "env", variable: "LOCALAPPDATA" });
     return Deno.env.get("LOCALAPPDATA");
   }
 }
 
 export function denoCacheDir() {
-  Deno.permissions.request({ name: "env", variable: "DENO_DIR" });
   const dd = Deno.env.get("DENO_DIR");
   let root;
   if (dd) {
