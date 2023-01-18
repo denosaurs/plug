@@ -255,6 +255,9 @@ export async function download(options: FetchOptions): Promise<string> {
       case "file:": {
         console.log(`${colors.green("Copying")} ${url}`);
         await Deno.copyFile(fromFileUrl(url), cacheFilePath);
+        if (Deno.build.os !== "windows") {
+          await Deno.chmod(cacheFilePath, 0o644);
+        }
         break;
       }
 
