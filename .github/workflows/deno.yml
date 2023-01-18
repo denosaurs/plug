@@ -23,7 +23,7 @@ jobs:
   tests:
     name: ${{ matrix.kind }} ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
+    timeout-minutes: 5
     strategy:
       matrix:
         os: [macOS-latest, windows-latest, ubuntu-latest]
