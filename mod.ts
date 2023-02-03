@@ -105,6 +105,15 @@ export type {
 } from "./types.ts";
 export { download } from "./download.ts";
 
+/* Magic types from deno which help implement better FFI type checking */
+type Cast<A, B> = A extends B ? A : B;
+type Const<T> = Cast<
+  T,
+  | (T extends string | number | bigint | boolean ? T : never)
+  | { [K in keyof T]: Const<T[K]> }
+  | []
+>;
+
 /**
  * Opens a dynamic library and registers symbols, compatible with
  * {@link Deno.dlopen} yet with extended functionality allowing you to use
@@ -140,7 +149,8 @@ export { download } from "./download.ts";
  */
 export async function dlopen<S extends Deno.ForeignLibraryInterface>(
   options: FetchOptions,
-  symbols: S,
+  symbols: Const<S>,
 ): Promise<Deno.DynamicLibrary<S>> {
-  return Deno.dlopen(await download(options), symbols);
+  // deno-lint-ignore no-explicit-any
+  return Deno.dlopen<S>(await download(options), symbols as any);
 }

@@ -1,9 +1,9 @@
 import {
-  colors,
   dirname,
   ensureDir,
   extname,
   fromFileUrl,
+  green,
   join,
   normalize,
   resolve,
@@ -232,7 +232,7 @@ export async function download(options: FetchOptions): Promise<string> {
     switch (url.protocol) {
       case "http:":
       case "https:": {
-        console.log(`${colors.green("Downloading")} ${url}`);
+        console.log(`${green("Downloading")} ${url}`);
         const response = await fetch(url.toString());
 
         if (!response.ok) {
@@ -253,7 +253,7 @@ export async function download(options: FetchOptions): Promise<string> {
       }
 
       case "file:": {
-        console.log(`${colors.green("Copying")} ${url}`);
+        console.log(`${green("Copying")} ${url}`);
         await Deno.copyFile(fromFileUrl(url), cacheFilePath);
         if (Deno.build.os !== "windows") {
           await Deno.chmod(cacheFilePath, 0o644);
