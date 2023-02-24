@@ -27,11 +27,21 @@ export const defaultExtensions: OsRecord<string> = {
   darwin: "dylib",
   linux: "so",
   windows: "dll",
+  freebsd: "so",
+  netbsd: "so",
+  aix: "so",
+  solaris: "so",
+  illumos: "so",
 };
 
 export const defaultPrefixes: OsRecord<string> = {
   darwin: "lib",
   linux: "lib",
+  netbsd: "lib",
+  freebsd: "lib",
+  aix: "lib",
+  solaris: "lib",
+  illumos: "lib",
   windows: "",
 };
 
