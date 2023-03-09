@@ -21,6 +21,11 @@ import { dlopen } from "https://deno.land/x/plug/mod.ts";
 // * darwin: "https://example.com/some/path/libexample.dylib"
 // * windows: "https://example.com/some/path/example.dll"
 // * linux: "https://example.com/some/path/libexample.so"
+// * freebsd: "https://example.com/some/path/libexample.so"
+// * netbsd: "https://example.com/some/path/libexample.so"
+// * aix: "https://example.com/some/path/libexample.so"
+// * solaris: "https://example.com/some/path/libexample.so"
+// * illumos: "https://example.com/some/path/libexample.so"
 const library = await dlopen("https://example.com/some/path/", {
   noop: { parameters: [], result: "void" },
 });
@@ -41,6 +46,11 @@ const options: FetchOptions = {
   // darwin: "https://example.com/some/path/libexample.dylib"
   // windows: "https://example.com/some/path/example.dll"
   // linux: "https://example.com/some/path/libexample.so"
+  // freebsd: "https://example.com/some/path/libexample.so"
+  // netbsd: "https://example.com/some/path/libexample.so"
+  // aix: "https://example.com/some/path/libexample.so"
+  // solaris: "https://example.com/some/path/libexample.so"
+  // illumos: "https://example.com/some/path/libexample.so"
 };
 
 const library = await dlopen(options, {
@@ -65,6 +75,11 @@ const options: FetchOptions = {
     },
     windows: `https://example.com/some/path/example.dll`,
     linux: `https://example.com/some/path/libexample.so`,
+    freebsd: "https://example.com/some/path/libexample_freebsd.so"
+    netbsd: "https://example.com/some/path/libexample_netbsd.so"
+    aix: "https://example.com/some/path/libexample_aix.so"
+    solaris: "https://example.com/some/path/libexample_solaris.so"
+    illumos: "https://example.com/some/path/libexample_illumos.so"
   },
 };
 

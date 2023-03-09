@@ -2,7 +2,6 @@ import {
   assert,
   assertEquals,
   assertRejects,
-  assertThrows,
   basename,
   dirname,
   fromFileUrl,
@@ -368,7 +367,6 @@ Deno.test("cacheDir", async ({ step }) => {
   // Restore the snapshot of `Deno.build`
   Deno.build = build;
 });
-
 
 Deno.test("denoCacheDir", async ({ step }) => {
   // Save a snapshot of `Deno.build`

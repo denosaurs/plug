@@ -55,6 +55,11 @@ function getCrossOption<T>(
   if (
     "darwin" in record ||
     "linux" in record ||
+    "netbsd" in record ||
+    "freebsd" in record ||
+    "aix" in record ||
+    "solaris" in record ||
+    "illumos" in record ||
     "windows" in record
   ) {
     const subrecord = record[Deno.build.os];
