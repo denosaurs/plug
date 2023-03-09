@@ -142,7 +142,19 @@ Deno.test("createDownloadURL", async ({ step }) => {
     });
 
     await step("os", async ({ step }) => {
-      for (const os of ["darwin", "linux", "windows"]) {
+      Deno.build.os;
+      for (
+        const os of [
+          "darwin",
+          "linux",
+          "windows",
+          "freebsd",
+          "netbsd",
+          "aix",
+          "solaris",
+          "illumos",
+        ]
+      ) {
         await step(os, async ({ step }) => {
           // @ts-ignore TS2540
           Deno.build = { os };

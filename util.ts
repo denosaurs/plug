@@ -82,6 +82,11 @@ export function homeDir(): string | undefined {
       return Deno.env.get("USERPROFILE");
     case "linux":
     case "darwin":
+    case "freebsd":
+    case "netbsd":
+    case "aix":
+    case "solaris":
+    case "illumos":
       return Deno.env.get("HOME");
     default:
       throw Error("unreachable");
@@ -94,7 +99,9 @@ export function cacheDir(): string | undefined {
     if (home) {
       return join(home, "Library/Caches");
     }
-  } else if (Deno.build.os === "linux") {
+  } else if (Deno.build.os === "windows") {
+    return Deno.env.get("LOCALAPPDATA");
+  } else {
     const cacheHome = Deno.env.get("XDG_CACHE_HOME");
     if (cacheHome) {
       return cacheHome;
@@ -104,8 +111,6 @@ export function cacheDir(): string | undefined {
         return join(home, ".cache");
       }
     }
-  } else {
-    return Deno.env.get("LOCALAPPDATA");
   }
 }
 
