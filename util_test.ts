@@ -2,6 +2,7 @@ import {
   assert,
   assertEquals,
   assertRejects,
+  assertThrows,
   basename,
   dirname,
   fromFileUrl,
@@ -172,6 +173,11 @@ Deno.test("homeDir", async ({ step }) => {
       Deno.env.delete("HOME");
     });
   }
+  await step("unreachable", () => {
+    // @ts-ignore TS2540
+    Deno.build = { os: "templeos" };
+    assertThrows(() => homeDir(), Error, "unreachable");
+  });
   // @ts-ignore TS2540
   // Restore the snapshot of `Deno.build`
   Deno.build = build;
