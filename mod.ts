@@ -13,7 +13,7 @@
  * // on operating system:
  * // * darwin: "https://example.com/some/path/libexample.dylib"
  * // * windows: "https://example.com/some/path/example.dll"
- * // * linux: "https://example.com/some/path/libexample.so"
+ * // * unix: "https://example.com/some/path/libexample.so"
  * const library = await dlopen("https://example.com/some/path/", {
  *   noop: { parameters: [], result: "void" },
  * });
@@ -32,7 +32,7 @@
  *   // Becomes:
  *   // darwin: "https://example.com/some/path/libexample.dylib"
  *   // windows: "https://example.com/some/path/example.dll"
- *   // linux: "https://example.com/some/path/libexample.so"
+ *   // unix: "https://example.com/some/path/libexample.so"
  * };
  *
  * const library = await dlopen(options, {
@@ -55,7 +55,7 @@
  *       x86_64: `https://example.com/some/path/libexample.x86_64.dylib`,
  *     },
  *     windows: `https://example.com/some/path/example.dll`,
- *     linux: `https://example.com/some/path/libexample.so`,
+ *     unix: `https://example.com/some/path/libexample.so`,
  *   },
  * };
  *

@@ -96,7 +96,7 @@ export interface NamedOptions {
 
   /**
    * A {@link OsRecord} containing the extensions for the respective
-   * operating-systems. By default this is `.so` for linux, `.dylib` for darwin
+   * operating-systems. By default this is `.so` for linux, freebsd, netbsd, aix, solaris and illumos, `.dylib` for darwin
    * and `.dll` for windows.
    *
    * ```
@@ -108,7 +108,7 @@ export interface NamedOptions {
   /**
    * A {@link NestedCrossRecord} containing the prefixes for the respective
    * operating-systems and architectures. By default this is `lib` for all
-   * architectures on linux and darwin and empty for windows.
+   * architectures on linux, darwin, freebsd, netbsd, aix, solaris and illumos and empty for windows.
    *
    * ```
    * libplug.x86_64.dll

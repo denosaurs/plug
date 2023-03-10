@@ -173,13 +173,11 @@ Deno.test("homeDir", async ({ step }) => {
       Deno.env.delete("HOME");
     });
   }
-
   await step("unreachable", () => {
     // @ts-ignore TS2540
-    Deno.build = { os: "freebsd" };
+    Deno.build = { os: "templeos" };
     assertThrows(() => homeDir(), Error, "unreachable");
   });
-
   // @ts-ignore TS2540
   // Restore the snapshot of `Deno.build`
   Deno.build = build;
@@ -243,10 +241,132 @@ Deno.test("cacheDir", async ({ step }) => {
     });
   });
 
-  await step("unreachable", () => {
+  await step("freebsd", async ({ step }) => {
     // @ts-ignore TS2540
     Deno.build = { os: "freebsd" };
-    assertThrows(() => homeDir(), Error, "unreachable");
+
+    await step("XDG_CACHE_HOME", () => {
+      Deno.env.set("XDG_CACHE_HOME", cache);
+
+      const dir = cacheDir();
+      assertEquals(dir, cache);
+
+      Deno.env.delete("XDG_CACHE_HOME");
+    });
+
+    await step("HOME", () => {
+      Deno.env.set("HOME", cache);
+
+      const dir = cacheDir();
+      assert(dir);
+      assertEquals(basename(dir), ".cache");
+      assertEquals(basename(dirname(dir)), "cache");
+      assertEquals(basename(dirname(dirname(dir))), "plug");
+
+      Deno.env.delete("HOME");
+    });
+  });
+
+  await step("solaris", async ({ step }) => {
+    // @ts-ignore TS2540
+    Deno.build = { os: "solaris" };
+
+    await step("XDG_CACHE_HOME", () => {
+      Deno.env.set("XDG_CACHE_HOME", cache);
+
+      const dir = cacheDir();
+      assertEquals(dir, cache);
+
+      Deno.env.delete("XDG_CACHE_HOME");
+    });
+
+    await step("HOME", () => {
+      Deno.env.set("HOME", cache);
+
+      const dir = cacheDir();
+      assert(dir);
+      assertEquals(basename(dir), ".cache");
+      assertEquals(basename(dirname(dir)), "cache");
+      assertEquals(basename(dirname(dirname(dir))), "plug");
+
+      Deno.env.delete("HOME");
+    });
+  });
+
+  await step("netbsd", async ({ step }) => {
+    // @ts-ignore TS2540
+    Deno.build = { os: "netbsd" };
+    await step("XDG_CACHE_HOME", () => {
+      Deno.env.set("XDG_CACHE_HOME", cache);
+
+      const dir = cacheDir();
+      assertEquals(dir, cache);
+
+      Deno.env.delete("XDG_CACHE_HOME");
+    });
+
+    await step("HOME", () => {
+      Deno.env.set("HOME", cache);
+
+      const dir = cacheDir();
+      assert(dir);
+      assertEquals(basename(dir), ".cache");
+      assertEquals(basename(dirname(dir)), "cache");
+      assertEquals(basename(dirname(dirname(dir))), "plug");
+
+      Deno.env.delete("HOME");
+    });
+  });
+
+  await step("aix", async ({ step }) => {
+    // @ts-ignore TS2540
+    Deno.build = { os: "aix" };
+
+    await step("XDG_CACHE_HOME", () => {
+      Deno.env.set("XDG_CACHE_HOME", cache);
+
+      const dir = cacheDir();
+      assertEquals(dir, cache);
+
+      Deno.env.delete("XDG_CACHE_HOME");
+    });
+
+    await step("HOME", () => {
+      Deno.env.set("HOME", cache);
+
+      const dir = cacheDir();
+      assert(dir);
+      assertEquals(basename(dir), ".cache");
+      assertEquals(basename(dirname(dir)), "cache");
+      assertEquals(basename(dirname(dirname(dir))), "plug");
+
+      Deno.env.delete("HOME");
+    });
+  });
+
+  await step("illumos", async ({ step }) => {
+    // @ts-ignore TS2540
+    Deno.build = { os: "illumos" };
+    await step("XDG_CACHE_HOME", () => {
+      Deno.env.set("XDG_CACHE_HOME", cache);
+
+      const dir = cacheDir();
+      assertEquals(dir, cache);
+
+      Deno.env.delete("XDG_CACHE_HOME");
+    });
+
+    await step("HOME", () => {
+      Deno.env.set("HOME", cache);
+
+      const dir = cacheDir();
+      assert(dir);
+      assertEquals(basename(dir), ".cache");
+      assertEquals(basename(dirname(dir)), "cache");
+      assertEquals(basename(dirname(dirname(dir))), "plug");
+
+      Deno.env.delete("HOME");
+    });
   });
 
   // @ts-ignore TS2540
