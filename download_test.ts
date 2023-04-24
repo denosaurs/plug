@@ -9,6 +9,19 @@ import {
 } from "./test_deps.ts";
 import { createDownloadURL, ensureCacheLocation } from "./download.ts";
 
+const ALL_ARCHS = ["x86_64", "aarch64"];
+
+const ALL_OSS = [
+  "darwin",
+  "linux",
+  "windows",
+  "freebsd",
+  "netbsd",
+  "aix",
+  "solaris",
+  "illumos",
+];
+
 async function isDirectory(filePath: string): Promise<boolean> {
   try {
     const stats = await Deno.lstat(filePath);
@@ -109,7 +122,7 @@ Deno.test("createDownloadURL", async ({ step }) => {
     const build = structuredClone(Deno.build);
 
     await step("arch", async ({ step }) => {
-      for (const arch of ["x86_64", "aarch64"]) {
+      for (const arch of ALL_ARCHS) {
         await step(arch, async ({ step }) => {
           // @ts-ignore TS2540
           Deno.build = { arch };
@@ -120,7 +133,7 @@ Deno.test("createDownloadURL", async ({ step }) => {
           });
           assert(result.pathname.endsWith(`test_${arch}`));
 
-          for (const os of ["darwin", "linux", "windows"]) {
+          for (const os of ALL_OSS) {
             await step(os, () => {
               // @ts-ignore TS2540
               Deno.build = {
@@ -143,18 +156,7 @@ Deno.test("createDownloadURL", async ({ step }) => {
 
     await step("os", async ({ step }) => {
       Deno.build.os;
-      for (
-        const os of [
-          "darwin",
-          "linux",
-          "windows",
-          "freebsd",
-          "netbsd",
-          "aix",
-          "solaris",
-          "illumos",
-        ]
-      ) {
+      for (const os of ALL_OSS) {
         await step(os, async ({ step }) => {
           // @ts-ignore TS2540
           Deno.build = { os };
@@ -165,7 +167,7 @@ Deno.test("createDownloadURL", async ({ step }) => {
           });
           assert(result.pathname.endsWith(`test_${os}`));
 
-          for (const arch of ["x86_64", "aarch64"]) {
+          for (const arch of ALL_ARCHS) {
             await step(arch, () => {
               // @ts-ignore TS2540
               Deno.build = {

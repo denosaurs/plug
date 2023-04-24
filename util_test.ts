@@ -19,6 +19,16 @@ import {
   urlToFilename,
 } from "./util.ts";
 
+const UNIX_LIKE_OSS = [
+  "linux",
+  "darwin",
+  "freebsd",
+  "netbsd",
+  "aix",
+  "solaris",
+  "illumos",
+];
+
 Deno.test("hash", async () => {
   assertEquals(
     await hash("hello_world"),
@@ -138,11 +148,11 @@ Deno.test("isFile", async ({ step }) => {
   });
 
   await step("false", async () => {
-    assert(!await isFile("./this_file_does_not_exist"));
+    assert(!(await isFile("./this_file_does_not_exist")));
     assert(
-      !await isFile(
+      !(await isFile(
         fromFileUrl(new URL("this_file_does_not_exist", import.meta.url)),
-      ),
+      )),
     );
   });
 });
@@ -162,7 +172,7 @@ Deno.test("homeDir", async ({ step }) => {
     Deno.env.delete("USERPROFILE");
   });
 
-  for (const os of ["linux", "darwin"]) {
+  for (const os of UNIX_LIKE_OSS) {
     await step(os, () => {
       // @ts-ignore TS2540
       Deno.build = { os };

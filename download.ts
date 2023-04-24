@@ -23,6 +23,19 @@ import {
   urlToFilename,
 } from "./util.ts";
 
+export const ALL_ARCHS = ["x86_64", "aarch64"];
+
+export const ALL_OSS = [
+  "darwin",
+  "linux",
+  "windows",
+  "freebsd",
+  "netbsd",
+  "aix",
+  "solaris",
+  "illumos",
+];
+
 export const defaultExtensions: OsRecord<string> = {
   darwin: "dylib",
   linux: "so",
@@ -45,28 +58,18 @@ export const defaultPrefixes: OsRecord<string> = {
   windows: "",
 };
 
-function getCrossOption<T>(
-  record?: NestedCrossRecord<T>,
-): T | undefined {
+function getCrossOption<T>(record?: NestedCrossRecord<T>): T | undefined {
   if (record === undefined) {
     return;
   }
 
-  if (
-    "darwin" in record ||
-    "linux" in record ||
-    "netbsd" in record ||
-    "freebsd" in record ||
-    "aix" in record ||
-    "solaris" in record ||
-    "illumos" in record ||
-    "windows" in record
-  ) {
-    const subrecord = record[Deno.build.os];
+  if (ALL_OSS.some((os) => os in record)) {
+    const subrecord = (record as OsRecord<T>)[Deno.build.os];
 
     if (
-      subrecord && typeof subrecord === "object" &&
-      ("x86_64" in subrecord || "aarch64" in subrecord)
+      subrecord &&
+      typeof subrecord === "object" &&
+      ALL_ARCHS.some((arch) => arch in subrecord)
     ) {
       return (subrecord as ArchRecord<T>)[Deno.build.arch];
     } else {
@@ -74,15 +77,13 @@ function getCrossOption<T>(
     }
   }
 
-  if (
-    "x86_64" in record ||
-    "aarch64" in record
-  ) {
-    const subrecord = record[Deno.build.arch];
+  if (ALL_ARCHS.some((arch) => arch in record)) {
+    const subrecord = (record as ArchRecord<T>)[Deno.build.arch];
 
     if (
-      subrecord && typeof subrecord === "object" &&
-      ("darwin" in subrecord || "linux" in subrecord || "windows" in subrecord)
+      subrecord &&
+      typeof subrecord === "object" &&
+      ALL_OSS.some((os) => os in subrecord)
     ) {
       return (subrecord as OsRecord<T>)[Deno.build.os];
     } else {
@@ -285,7 +286,7 @@ export async function download(options: FetchOptions): Promise<string> {
     await Deno.writeTextFile(cacheMetaPath, JSON.stringify(meta));
   }
 
-  if (!await isFile(cacheFilePath)) {
+  if (!(await isFile(cacheFilePath))) {
     throw new Error(`Could not find "${url}" in cache.`);
   }
 
