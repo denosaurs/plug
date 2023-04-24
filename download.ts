@@ -230,10 +230,8 @@ export async function download(options: FetchOptions): Promise<string> {
     (typeof options === "object" && "cache" in options
       ? options.cache
       : undefined) ?? "use";
-  const [url, directory] = await Promise.all([
-    createDownloadURL(options),
-    ensureCacheLocation(location),
-  ]);
+  const url = createDownloadURL(options);
+  const directory = await ensureCacheLocation(location);
   const cacheBasePath = join(directory, await urlToFilename(url));
   const cacheFilePath = `${cacheBasePath}${extname(url.pathname)}`;
   const cacheMetaPath = `${cacheBasePath}.metadata.json`;
