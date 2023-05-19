@@ -66,29 +66,21 @@ function getCrossOption<T>(record?: NestedCrossRecord<T>): T | undefined {
   if (ALL_OSS.some((os) => os in record)) {
     const subrecord = (record as OsRecord<T>)[Deno.build.os];
 
-    if (
-      subrecord &&
-      typeof subrecord === "object" &&
-      ALL_ARCHS.some((arch) => arch in subrecord)
-    ) {
-      return (subrecord as ArchRecord<T>)[Deno.build.arch];
-    } else {
-      return subrecord as T;
-    }
+    return subrecord &&
+        typeof subrecord === "object" &&
+        ALL_ARCHS.some((arch) => arch in subrecord)
+      ? (subrecord as ArchRecord<T>)[Deno.build.arch]
+      : subrecord as T;
   }
 
   if (ALL_ARCHS.some((arch) => arch in record)) {
     const subrecord = (record as ArchRecord<T>)[Deno.build.arch];
 
-    if (
-      subrecord &&
-      typeof subrecord === "object" &&
-      ALL_OSS.some((os) => os in subrecord)
-    ) {
-      return (subrecord as OsRecord<T>)[Deno.build.os];
-    } else {
-      return subrecord as T;
-    }
+    return subrecord &&
+        typeof subrecord === "object" &&
+        ALL_OSS.some((os) => os in subrecord)
+      ? (subrecord as OsRecord<T>)[Deno.build.os]
+      : subrecord as T;
   }
 }
 
@@ -129,11 +121,7 @@ export function createDownloadURL(options: FetchOptions): URL {
       );
     }
 
-    if (typeof tmpUrl === "string") {
-      url = stringToURL(tmpUrl);
-    } else {
-      url = tmpUrl;
-    }
+    url = typeof tmpUrl === "string" ? stringToURL(tmpUrl) : tmpUrl;
   }
 
   // Assemble automatic cross-platform named urls here
