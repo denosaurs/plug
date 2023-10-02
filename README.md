@@ -20,7 +20,7 @@ import { dlopen } from "https://deno.land/x/plug/mod.ts";
 // on operating system:
 // * darwin: "https://example.com/some/path/libexample.dylib"
 // * windows: "https://example.com/some/path/example.dll"
-// * unix: "https://example.com/some/path/libexample.so"
+// * linux: "https://example.com/some/path/libexample.so"
 const library = await dlopen("https://example.com/some/path/", {
   noop: { parameters: [], result: "void" },
 });
@@ -40,7 +40,7 @@ const options: FetchOptions = {
   // Becomes:
   // darwin: "https://example.com/some/path/libexample.dylib"
   // windows: "https://example.com/some/path/example.dll"
-  // unix: "https://example.com/some/path/libexample.so"
+  // linux: "https://example.com/some/path/libexample.so"
 };
 
 const library = await dlopen(options, {
