@@ -45,6 +45,7 @@ export const defaultExtensions: OsRecord<string> = {
   aix: "so",
   solaris: "so",
   illumos: "so",
+  android: "so",
 };
 
 export const defaultPrefixes: OsRecord<string> = {
@@ -56,6 +57,7 @@ export const defaultPrefixes: OsRecord<string> = {
   solaris: "lib",
   illumos: "lib",
   windows: "",
+  android: "lib",
 };
 
 function getCrossOption<T>(record?: NestedCrossRecord<T>): T | undefined {

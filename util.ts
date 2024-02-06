@@ -46,11 +46,9 @@ export function stringToURL(url: string): URL {
 }
 
 export async function hash(value: string): Promise<string> {
-  return decoder.decode(
-    hex(
-      new Uint8Array(
-        await crypto.subtle.digest("SHA-256", encoder.encode(value)),
-      ),
+  return hex(
+    new Uint8Array(
+      await crypto.subtle.digest("SHA-256", encoder.encode(value)),
     ),
   );
 }
