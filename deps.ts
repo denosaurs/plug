@@ -7,7 +7,7 @@ export {
   normalize,
   resolve,
   toFileUrl,
-} from "https://deno.land/std@0.203.0/path/mod.ts";
-export { ensureDir } from "https://deno.land/std@0.203.0/fs/mod.ts";
-export { encode as hex } from "https://deno.land/std@0.203.0/encoding/hex.ts";
-export { green } from "https://deno.land/std@0.203.0/fmt/colors.ts";
+} from "jsr:@std/path@0.213.1";
+export { ensureDir } from "jsr:@std/fs@0.213.1";
+export { encodeHex as hex } from "jsr:@std/encoding@0.213.1/hex";
+export { green } from "jsr:@std/fmt@0.213.1/colors";

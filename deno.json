@@ -1,4 +1,7 @@
 {
+  "name": "@denosaurs/plug",
+  "version": "1.0.3",
+  "exports": "./mod.ts",
   "lock": false,
   "importMap": "./import_map.json"
 }
