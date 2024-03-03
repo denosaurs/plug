@@ -7,8 +7,7 @@ import {
   toFileUrl,
 } from "./deps.ts";
 
-export const encoder = new TextEncoder();
-export const decoder = new TextDecoder();
+const encoder = new TextEncoder();
 
 function baseUrlToFilename(url: URL): string {
   const out = [];
@@ -112,7 +111,7 @@ export function cacheDir(): string | undefined {
   }
 }
 
-export function denoCacheDir() {
+export function denoCacheDir(): string | undefined {
   const dd = Deno.env.get("DENO_DIR");
   let root;
   if (dd) {

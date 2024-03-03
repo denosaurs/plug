@@ -1,0 +1,9 @@
+{
+  "imports": {
+    "https://deno.land/x/plug/": "./",
+    "@denosaurs/plug": "./mod.ts",
+    "@denosaurs/plug/types": "./types.ts",
+    "@denosaurs/plug/download": "./download.ts",
+    "@denosaurs/plug/util": "./util.ts"
+  }
+}

@@ -11,10 +11,26 @@ automatically create the URL for your cross-operating-system, cross-architecture
 libraries if you so wish using a simple configuration which deviates from the
 standard URL/string path input.
 
+## Installation
+
+Plug is published to [jsr.io](https://jsr.io/@denosaurs/plug) and
+[deno.land](https://deno.land/x/plug). The recommended way to use it is to use
+JSR:
+
+```bash
+deno add @denosaurs/plug
+```
+
+or without the CLI:
+
+```typescript
+import * as plug from "jsr:@denosaurs/plug";
+```
+
 ## Example using plug as an almost drop in replacement for `Deno.dlopen`
 
 ```ts
-import { dlopen } from "https://deno.land/x/plug/mod.ts";
+import { dlopen } from "@denosaurs/plug";
 
 // Drop-in replacement for `Deno.dlopen` which fetches the following depending
 // on operating system:
@@ -31,7 +47,7 @@ library.symbols.noop();
 ## Example using automatic binary name guessing
 
 ```ts
-import { dlopen, FetchOptions } from "https://deno.land/x/plug/mod.ts";
+import { dlopen, FetchOptions } from "@denosaurs/plug";
 
 // If you want plug to guess your binary names
 const options: FetchOptions = {
@@ -53,7 +69,7 @@ library.symbols.noop();
 ## Example using nested cross-platform options
 
 ```ts
-import { dlopen, FetchOptions } from "https://deno.land/x/plug/mod.ts";
+import { dlopen, FetchOptions } from "@denosaurs/plug";
 
 // Also you can specify the path for certain architecture
 const options: FetchOptions = {
@@ -79,7 +95,7 @@ await dlopen(options, {});
 ## Example using nested cross-platform options and automatic binary name guessing
 
 ```ts
-import { dlopen, FetchOptions } from "https://deno.land/x/plug/mod.ts";
+import { dlopen, FetchOptions } from "@denosaurs/plug";
 
 // Or even configure plug to automatically guess the binary names for you,
 // even when there are special rules for naming on specific architectures
@@ -100,6 +116,17 @@ const options: FetchOptions = {
 await dlopen(options, {});
 ```
 
+## Testing
+
+To run the plug tests, you can use the following command:
+
+```bash
+deno test --import-map test_import_map.json -A --doc
+```
+
+The `test_import_map.json` file is used to map the `@denosaurs/plug` import to
+the local `mod.ts` file instead of the remote one for the documentation tests.
+
 ## Other
 
 ### Related
@@ -115,4 +142,4 @@ Pull request, issues and feedback are very welcome. Code style is formatted with
 
 ### Licence
 
-Copyright 2020-2023, the denosaurs team. All rights reserved. MIT license.
+Copyright 2020-2024, the denosaurs team. All rights reserved. MIT license.

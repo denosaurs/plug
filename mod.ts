@@ -7,7 +7,7 @@
  *
  * @example
  * ```ts
- * import { dlopen } from "https://deno.land/x/plug/mod.ts";
+ * import { dlopen } from "@denosaurs/plug";
  *
  * // Drop-in replacement for `Deno.dlopen` which fetches the following depending
  * // on operating system:
@@ -23,7 +23,7 @@
  *
  * @example
  * ```ts
- * import { dlopen, FetchOptions } from "https://deno.land/x/plug/mod.ts";
+ * import { dlopen, FetchOptions } from "@denosaurs/plug";
  *
  * // If you want plug to guess your binary names
  * const options: FetchOptions = {
@@ -44,7 +44,7 @@
  *
  * @example
  * ```ts
- * import { dlopen, FetchOptions } from "https://deno.land/x/plug/mod.ts";
+ * import { dlopen, FetchOptions } from "@denosaurs/plug";
  *
  * // Also you can specify the path for certain architecture
  * const options: FetchOptions = {
@@ -64,7 +64,7 @@
  *
  * @example
  * ```ts
- * import { dlopen, FetchOptions } from "https://deno.land/x/plug/mod.ts";
+ * import { dlopen, FetchOptions } from "@denosaurs/plug";
  *
  * // Or even configure plug to automatically guess the binary names for you,
  * // even when there are special rules for naming on specific architectures
@@ -122,7 +122,7 @@ type Const<T> = Cast<
  *
  * @example
  * ```ts
- * import { dlopen, FetchOptions } from "https://deno.land/x/plug/mod.ts";
+ * import { dlopen, FetchOptions } from "@denosaurs/plug";
  *
  * // Configure plug to automatically guess the binary names for you, even when
  * // there for example are special rules for naming on specific architectures

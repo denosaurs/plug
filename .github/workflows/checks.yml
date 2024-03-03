@@ -1,0 +1,24 @@
+name: Checks
+
+on: [push, pull_request]
+
+jobs:
+  style:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v1
+      - run: deno fmt --check
+      - run: deno lint
+      
+  tests:
+    name: ${{ matrix.kind }} ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        os: [macOS-latest, windows-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v1
+      - run: deno test --import-map test_import_map.json -A --doc

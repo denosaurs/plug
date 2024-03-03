@@ -1,7 +1,11 @@
 {
   "name": "@denosaurs/plug",
-  "version": "1.0.3",
-  "exports": "./mod.ts",
-  "lock": false,
-  "importMap": "./import_map.json"
+  "version": "1.0.4",
+  "exports": {
+    ".": "./mod.ts",
+    "./types": "./types.ts",
+    "./download": "./download.ts",
+    "./util": "./util.ts"
+  },
+  "lock": false
 }
