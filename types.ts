@@ -1,4 +1,10 @@
 /**
+ * This module contains the common types used in plug.
+ *
+ * @module
+ */
+
+/**
  * A record keyed by possible operating system identifiers
  */
 export type OsRecord<T> = { [os in typeof Deno.build.os]: T };

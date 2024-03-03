@@ -1,3 +1,9 @@
+/**
+ * This file contains useful utility functions used by plug.
+ *
+ * @module
+ */
+
 import {
   hex,
   isAbsolute,
@@ -35,6 +41,11 @@ function baseUrlToFilename(url: URL): string {
   return join(...out);
 }
 
+/**
+ * Transforms a string into a URL.
+ *
+ * @private
+ */
 export function stringToURL(url: string): URL {
   // deno-fmt-ignore
   return url.startsWith("file://")
@@ -44,6 +55,11 @@ export function stringToURL(url: string): URL {
     : toFileUrl(resolve(url));
 }
 
+/**
+ * SHA-256 hashes a string. Used internally to hash URLs for cache filenames.
+ *
+ * @private
+ */
 export async function hash(value: string): Promise<string> {
   return hex(
     new Uint8Array(
@@ -52,12 +68,22 @@ export async function hash(value: string): Promise<string> {
   );
 }
 
+/**
+ * Transforms a URL into a filename for the cache.
+ *
+ * @private
+ */
 export async function urlToFilename(url: URL): Promise<string> {
   const cacheFilename = baseUrlToFilename(url);
   const hashedFilename = await hash(url.pathname + url.search);
   return join(cacheFilename, hashedFilename);
 }
 
+/**
+ * Checks if a file exists.
+ *
+ * @private
+ */
 export async function isFile(filePath: string): Promise<boolean> {
   try {
     const stats = await Deno.lstat(filePath);
@@ -73,6 +99,9 @@ export async function isFile(filePath: string): Promise<boolean> {
 // The rest of is based on code from denoland/deno_cache by the Deno authors
 // Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
 
+/**
+ * @returns The home directory of the user.
+ */
 export function homeDir(): string | undefined {
   switch (Deno.build.os) {
     case "windows":
@@ -90,6 +119,9 @@ export function homeDir(): string | undefined {
   }
 }
 
+/**
+ * @returns The cache directory of the user.
+ */
 export function cacheDir(): string | undefined {
   if (Deno.build.os === "darwin") {
     const home = homeDir();
@@ -111,6 +143,9 @@ export function cacheDir(): string | undefined {
   }
 }
 
+/**
+ * @returns The cache directory for Deno.
+ */
 export function denoCacheDir(): string | undefined {
   const dd = Deno.env.get("DENO_DIR");
   let root;

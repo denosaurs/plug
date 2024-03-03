@@ -1,3 +1,9 @@
+/**
+ * This module contains the common types used in plug.
+ *
+ * @module
+ */
+
 import {
   dirname,
   ensureDir,
@@ -23,11 +29,25 @@ import {
   urlToFilename,
 } from "./util.ts";
 
-export const ALL_ARCHS = ["x86_64", "aarch64"];
+/**
+ * A list of all possible system architectures.
+ *
+ * This should match the {@link Deno.build.arch} type.
+ */
+export const ALL_ARCHS: (typeof Deno.build.arch)[] = [
+  "x86_64",
+  "aarch64",
+];
 
-export const ALL_OSS = [
+/**
+ * A list of all possible system operating systems.
+ *
+ * This should match the {@link Deno.build.os} type.
+ */
+export const ALL_OSS: (typeof Deno.build.os)[] = [
   "darwin",
   "linux",
+  "android",
   "windows",
   "freebsd",
   "netbsd",
@@ -36,6 +56,10 @@ export const ALL_OSS = [
   "illumos",
 ];
 
+/**
+ * The default file extensions for dynamic libraries in the different operating
+ * systems.
+ */
 export const defaultExtensions: OsRecord<string> = {
   darwin: "dylib",
   linux: "so",
@@ -48,6 +72,10 @@ export const defaultExtensions: OsRecord<string> = {
   android: "so",
 };
 
+/**
+ * The default file prefixes for dynamic libraries in the different operating
+ * systems.
+ */
 export const defaultPrefixes: OsRecord<string> = {
   darwin: "lib",
   linux: "lib",
