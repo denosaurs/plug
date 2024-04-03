@@ -151,6 +151,9 @@ export async function dlopen<S extends Deno.ForeignLibraryInterface>(
   options: FetchOptions,
   symbols: Const<S>,
 ): Promise<Deno.DynamicLibrary<S>> {
+  if (Deno.dlopen === undefined) {
+    throw new Error("`--unstable-ffi` is required");
+  }
   // deno-lint-ignore no-explicit-any
   return Deno.dlopen<S>(await download(options), symbols as any);
 }
