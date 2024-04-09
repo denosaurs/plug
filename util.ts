@@ -4,14 +4,8 @@
  * @module
  */
 
-import {
-  hex,
-  isAbsolute,
-  join,
-  normalize,
-  resolve,
-  toFileUrl,
-} from "./deps.ts";
+import { isAbsolute, join, normalize, resolve, toFileUrl } from "@std/path";
+import { encodeHex } from "@std/encoding/hex";
 
 const encoder = new TextEncoder();
 
@@ -61,7 +55,7 @@ export function stringToURL(url: string): URL {
  * @private
  */
 export async function hash(value: string): Promise<string> {
-  return hex(
+  return encodeHex(
     new Uint8Array(
       await crypto.subtle.digest("SHA-256", encoder.encode(value)),
     ),

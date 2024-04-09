@@ -3,12 +3,9 @@ import {
   assertEquals,
   assertRejects,
   assertThrows,
-  basename,
-  dirname,
-  fromFileUrl,
-  join,
-  normalize,
-} from "./test_deps.ts";
+} from "jsr:@std/assert";
+import { basename, dirname, fromFileUrl, join, normalize } from "@std/path";
+
 import {
   cacheDir,
   denoCacheDir,

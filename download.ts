@@ -6,15 +6,15 @@
 
 import {
   dirname,
-  ensureDir,
   extname,
   fromFileUrl,
-  green,
   join,
   normalize,
   resolve,
-} from "./deps.ts";
-import {
+} from "@std/path";
+import { ensureDir } from "@std/fs";
+import { green } from "@std/fmt/colors";
+import type {
   ArchRecord,
   CacheLocation,
   FetchOptions,

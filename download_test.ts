@@ -3,10 +3,9 @@ import {
   assertEquals,
   assertMatch,
   assertRejects,
-  basename,
-  dirname,
-  normalize,
-} from "./test_deps.ts";
+} from "jsr:@std/assert";
+import { basename, dirname, normalize } from "@std/path";
+
 import { createDownloadURL, ensureCacheLocation } from "./download.ts";
 
 const ALL_ARCHS = ["x86_64", "aarch64"];
