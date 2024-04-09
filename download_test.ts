@@ -3,10 +3,9 @@ import {
   assertEquals,
   assertMatch,
   assertRejects,
-  basename,
-  dirname,
-  normalize,
-} from "./test_deps.ts";
+} from "jsr:@std/assert";
+import { basename, dirname, normalize } from "@std/path";
+
 import { createDownloadURL, ensureCacheLocation } from "./download.ts";
 
 const ALL_ARCHS = ["x86_64", "aarch64"];
@@ -195,11 +194,34 @@ Deno.test("createDownloadURL", async ({ step }) => {
 });
 
 Deno.test("ensureCacheLocation", async ({ step }) => {
-  await step("deno", async () => {
+  await step("deno", async ({ step }) => {
     const location = await ensureCacheLocation("deno");
     assertEquals(basename(location), "plug");
     assertEquals(basename(dirname(location)), "deno");
     assert(await isDirectory(location));
+
+    await step("missing", async () => {
+      // Save a snapshot of `Deno.build`
+      const build = structuredClone(Deno.build);
+      const HOME = Deno.env.get("HOME");
+      const DENO_DIR = Deno.env.get("DENO_DIR");
+      // @ts-ignore TS2540
+      Deno.build = { os: "linux" };
+      Deno.env.delete("HOME");
+      Deno.env.delete("DENO_DIR");
+
+      await assertRejects(
+        () => ensureCacheLocation("deno"),
+        Error,
+        "Could not get the deno cache directory, try using another CacheLocation in the plug options.",
+      );
+
+      // @ts-ignore TS2540
+      // Restore the snapshot of `Deno.build`
+      Deno.build = build;
+      if (HOME) Deno.env.set("HOME", HOME);
+      if (DENO_DIR) Deno.env.set("DENO_DIR", DENO_DIR);
+    });
   });
 
   await step("cwd", async () => {
@@ -209,10 +231,33 @@ Deno.test("ensureCacheLocation", async ({ step }) => {
     assert(await isDirectory(location));
   });
 
-  await step("cache", async () => {
+  await step("cache", async ({ step }) => {
     const location = await ensureCacheLocation("cache");
     assertEquals(basename(location), "plug");
     assert(await isDirectory(location));
+
+    await step("missing", async () => {
+      // Save a snapshot of `Deno.build`
+      const build = structuredClone(Deno.build);
+      const HOME = Deno.env.get("HOME");
+      const XDG_CACHE_HOME = Deno.env.get("XDG_CACHE_HOME");
+      // @ts-ignore TS2540
+      Deno.build = { os: "linux" };
+      Deno.env.delete("HOME");
+      Deno.env.delete("XDG_CACHE_HOME");
+
+      await assertRejects(
+        () => ensureCacheLocation("cache"),
+        Error,
+        "Could not get the cache directory, try using another CacheLocation in the plug options.",
+      );
+
+      // @ts-ignore TS2540
+      // Restore the snapshot of `Deno.build`
+      Deno.build = build;
+      if (HOME) Deno.env.set("HOME", HOME);
+      if (XDG_CACHE_HOME) Deno.env.set("XDG_CACHE_HOME", XDG_CACHE_HOME);
+    });
   });
 
   await step("tmp", async () => {
@@ -221,8 +266,18 @@ Deno.test("ensureCacheLocation", async ({ step }) => {
     assert(await isDirectory(location));
   });
 
-  await step("string", async () => {
+  await step("path string", async () => {
     const location = await ensureCacheLocation("./plug/cache/");
+    assertEquals(basename(location), "cache");
+    assertEquals(basename(dirname(location)), "plug");
+    assertEquals(normalize(dirname(dirname(location))), Deno.cwd());
+    assert(await isDirectory(location));
+  });
+
+  await step("file string", async () => {
+    const location = await ensureCacheLocation(
+      new URL("./plug/cache/", import.meta.url).href,
+    );
     assertEquals(basename(location), "cache");
     assertEquals(basename(dirname(location)), "plug");
     assertEquals(normalize(dirname(dirname(location))), Deno.cwd());
