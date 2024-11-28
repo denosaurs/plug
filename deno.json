@@ -1,6 +1,6 @@
 {
   "name": "@denosaurs/plug",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "exports": {
     ".": "./mod.ts",
     "./types": "./types.ts",
@@ -8,10 +8,10 @@
     "./util": "./util.ts"
   },
   "imports": {
-    "@std/encoding/hex": "jsr:@std/encoding@^0.221.0/hex",
-    "@std/fmt/colors": "jsr:@std/fmt@^0.221.0/colors",
-    "@std/fs": "jsr:@std/fs@^0.221.0",
-    "@std/path": "jsr:@std/path@^0.221.0"
+    "@std/encoding/hex": "jsr:@std/encoding@^1/hex",
+    "@std/fmt/colors": "jsr:@std/fmt@^1/colors",
+    "@std/fs": "jsr:@std/fs@^1",
+    "@std/path": "jsr:@std/path@^1"
   },
   "lock": false
 }
