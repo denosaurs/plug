@@ -5,10 +5,10 @@
     "@denosaurs/plug/types": "./types.ts",
     "@denosaurs/plug/download": "./download.ts",
     "@denosaurs/plug/util": "./util.ts",
-    "@std/assert": "jsr:@std/assert@^0.221.0",
-    "@std/encoding/hex": "jsr:@std/encoding@^0.221.0/hex",
-    "@std/fmt/colors": "jsr:@std/fmt@^0.221.0/colors",
-    "@std/fs": "jsr:@std/fs@^0.221.0",
-    "@std/path": "jsr:@std/path@^0.221.0"
+    "@std/assert": "jsr:@std/assert@^1",
+    "@std/encoding/hex": "jsr:@std/encoding@^1/hex",
+    "@std/fmt/colors": "jsr:@std/fmt@^1/colors",
+    "@std/fs": "jsr:@std/fs@^1",
+    "@std/path": "jsr:@std/path@^1"
   }
 }

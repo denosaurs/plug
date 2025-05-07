@@ -34,10 +34,7 @@ import {
  *
  * This should match the {@link Deno.build.arch} type.
  */
-export const ALL_ARCHS: (typeof Deno.build.arch)[] = [
-  "x86_64",
-  "aarch64",
-];
+export const ALL_ARCHS: (typeof Deno.build.arch)[] = ["x86_64", "aarch64"];
 
 /**
  * A list of all possible system operating systems.

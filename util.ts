@@ -42,9 +42,9 @@ function baseUrlToFilename(url: URL): string {
  */
 export function stringToURL(url: string): URL {
   // deno-fmt-ignore
-  return url.startsWith("file://")
-      || url.startsWith("http://")
-      || url.startsWith("https://")
+  return url.startsWith("file://") ||
+    url.startsWith("http://") ||
+    url.startsWith("https://")
     ? new URL(url)
     : toFileUrl(resolve(url));
 }
@@ -107,6 +107,7 @@ export function homeDir(): string | undefined {
     case "aix":
     case "solaris":
     case "illumos":
+    case "android":
       return Deno.env.get("HOME");
     default:
       throw Error("unreachable");

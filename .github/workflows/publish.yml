@@ -13,5 +13,5 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
-      - uses: denoland/setup-deno@v1
+      - uses: denoland/setup-deno@v2
       - run: deno publish
