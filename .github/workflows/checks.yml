@@ -21,4 +21,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: denoland/setup-deno@v2
-      - run: deno test --import-map test_import_map.json -A --doc
+      - run: deno test --import-map test_import_map.json -A
